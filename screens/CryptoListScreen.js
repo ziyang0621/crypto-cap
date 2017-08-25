@@ -1,13 +1,41 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Platform } from 'react-native';
-import { Button, List, ListItem } from 'react-native-elements';
+import { Constants } from 'expo';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  ActivityIndicator,
+  RefreshControl,
+  Platform } from 'react-native';
+import { Header, Avatar, Icon, Button, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class CryptoListScreen extends Component {
   static navigationOptions = {
-    title: 'Crypto Cap List'
+    header: ({ navigate }) => {
+      return (
+        <Header
+          centerComponent={
+            <Text style={styles.headerTitleTextView}>
+              Crypto Cap
+            </Text>
+          }
+          rightComponent={
+            <Icon
+              name='refresh'
+              color='#fff'
+              underlayColor="#365161"
+              onPress={() => console.log('hello')} />
+          }
+          backgroundColor="#031622"
+        />
+      )
+    }
   }
+
+  state = { refreshing: false };
 
   componentDidMount() {
     this.props.fetchCryptoList('USD', 100, (list) => {
@@ -16,18 +44,36 @@ class CryptoListScreen extends Component {
   }
 
   renderList(cryptoInfoList) {
+    const { refreshing } = this.state;
+    const refreshControl =
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={this.onRefresh}
+      />;
     return (
       <List>
+        {refreshControl}
         {
           cryptoInfoList.map((item, i) => (
             <ListItem
+              containerStyle={styles.listItemContainerView}
               hideChevron={true}
-              onPress={() => console.log('Pressed')}
               key={i}
-              title={item.name}
-              subtitle={
-                <View style={styles.subtitleView}>
-                  <Text style={styles.subtitleText}>{item.price_usd}</Text>
+              avatar={
+                <Avatar
+                  containerStyle={styles.avatarContainerView}
+                  small
+                  rounded
+                  source={{ uri: item.image_url }}
+                />
+              }
+              title={
+                <View style={styles.titleView}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text style={styles.rankText}>{item.rank}</Text>
+                    <Text style={styles.nameText}>{item.name}</Text>
+                  </View>
+                  <Text style={styles.priceText}>${item.price_usd}</Text>
                 </View>
               }
             />
@@ -37,21 +83,31 @@ class CryptoListScreen extends Component {
     )
   }
 
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    setTimeout(()=>{
+      this.setState({ refreshing: false });
+    }, 2000)
+
+    // this.props.fetchCryptoList('USD', 100, (list) => {
+    //   debugger;
+    // });
+  }
+
   render() {
     console.log('CryptoListScreen render');
     const { cryptoInfo } = this.props;
+
     if (cryptoInfo && cryptoInfo.list) {
       const listView = this.renderList(cryptoInfo.list);
       return (
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           {listView}
         </ScrollView>
       );
     }
     return (
-      <View style={styles.loadingView}>
-        <Text>Loading...</Text>
-      </View>
+      <ActivityIndicator size='large' style={styles.loadingView}/>
     );
   }
 }
@@ -59,18 +115,54 @@ class CryptoListScreen extends Component {
 const styles = {
   loadingView: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#031622',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  subtitleView: {
-    flexDirection: 'row',
-    paddingLeft: 10,
-    paddingTop: 5
+  headerTitleTextView: {
+    color: '#cdd3d7',
+    fontFamily: 'Helvetica Neue',
+    fontSize: 20,
   },
-  subtitleText: {
+  scrollView: {
+    backgroundColor: '#031622',
+    marginTop: Platform.OS === 'android' ? 0 : 64,
+  },
+  listItemContainerView: {
+    backgroundColor: '#031622',
+    borderTopWidth: 0,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#787c7f',
+  },
+  avatarContainerView: {
+    borderWidth: 0.2,
+    borderColor: '#909499',
+  },
+  titleView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexWrap: 'wrap',
+  },
+  rankText: {
     paddingLeft: 10,
-    color: 'grey'
+    paddingRight: 5,
+    color: '#cdd3d7',
+    fontFamily: 'HelveticaNeue-Light',
+    fontSize: 17,
+  },
+  nameText: {
+    paddingLeft: 10,
+    color: '#cdd3d7',
+    fontFamily: 'HelveticaNeue-Light',
+    fontSize: 17,
+  },
+  priceText: {
+    paddingLeft: 10,
+    color: '#52a0ff',
+    fontFamily: 'HelveticaNeue-Light',
+    fontSize: 17,
   }
 }
 
