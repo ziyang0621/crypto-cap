@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator,
   RefreshControl,
+  ListView,
   Platform } from 'react-native';
 import { Header, Avatar, Icon, Button, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -22,13 +23,6 @@ class CryptoListScreen extends Component {
               Crypto Cap
             </Text>
           }
-          rightComponent={
-            <Icon
-              name='refresh'
-              color='#fff'
-              underlayColor="#365161"
-              onPress={() => console.log('hello')} />
-          }
           backgroundColor="#031622"
         />
       )
@@ -43,55 +37,60 @@ class CryptoListScreen extends Component {
     });
   }
 
+  renderRow = (rowData, sectionId) => {
+    return (
+      <ListItem
+        containerStyle={styles.listItemContainerView}
+        hideChevron={true}
+        key={sectionId}
+        avatar={
+          <Avatar
+            containerStyle={styles.avatarContainerView}
+            small
+            rounded
+            source={{ uri: rowData.image_url }}
+          />
+        }
+        title={
+          <View style={styles.titleView}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              <Text style={styles.rankText}>{rowData.rank}</Text>
+              <Text style={styles.nameText}>{rowData.name}</Text>
+            </View>
+            <Text style={styles.priceText}>${rowData.price_usd}</Text>
+          </View>
+        }
+      />
+    );
+  }
+
   renderList(cryptoInfoList) {
     const { refreshing } = this.state;
-    const refreshControl =
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={this.onRefresh}
-      />;
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const dataSource = ds.cloneWithRows(cryptoInfoList);
     return (
-      <List>
-        {refreshControl}
-        {
-          cryptoInfoList.map((item, i) => (
-            <ListItem
-              containerStyle={styles.listItemContainerView}
-              hideChevron={true}
-              key={i}
-              avatar={
-                <Avatar
-                  containerStyle={styles.avatarContainerView}
-                  small
-                  rounded
-                  source={{ uri: item.image_url }}
-                />
-              }
-              title={
-                <View style={styles.titleView}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <Text style={styles.rankText}>{item.rank}</Text>
-                    <Text style={styles.nameText}>{item.name}</Text>
-                  </View>
-                  <Text style={styles.priceText}>${item.price_usd}</Text>
-                </View>
-              }
+      <List style={styles.listView}>
+        <ListView
+          renderRow={this.renderRow}
+          dataSource={dataSource}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.onRefresh}
             />
-          ))
-        }
+          }
+        />
       </List>
-    )
+    );
   }
 
   onRefresh = () => {
+    console.log('refreshing....');
     this.setState({ refreshing: true });
-    setTimeout(()=>{
+    this.props.fetchCryptoList('USD', 100, (list) => {
+      console.log('finished fetching list');
       this.setState({ refreshing: false });
-    }, 2000)
-
-    // this.props.fetchCryptoList('USD', 100, (list) => {
-    //   debugger;
-    // });
+    });
   }
 
   render() {
@@ -99,11 +98,8 @@ class CryptoListScreen extends Component {
     const { cryptoInfo } = this.props;
 
     if (cryptoInfo && cryptoInfo.list) {
-      const listView = this.renderList(cryptoInfo.list);
       return (
-        <ScrollView style={styles.scrollView}>
-          {listView}
-        </ScrollView>
+        this.renderList(cryptoInfo.list)
       );
     }
     return (
@@ -121,17 +117,17 @@ const styles = {
   },
   headerTitleTextView: {
     color: '#cdd3d7',
-    fontFamily: 'Helvetica Neue',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif' : 'HelveticaNeue-Light',
     fontSize: 20,
   },
-  scrollView: {
+  listView: {
     backgroundColor: '#031622',
-    marginTop: Platform.OS === 'android' ? 0 : 64,
+    marginTop: 64,
   },
   listItemContainerView: {
     backgroundColor: '#031622',
     borderTopWidth: 0,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderBottomColor: '#787c7f',
   },
   avatarContainerView: {
@@ -149,19 +145,19 @@ const styles = {
     paddingLeft: 10,
     paddingRight: 5,
     color: '#cdd3d7',
-    fontFamily: 'HelveticaNeue-Light',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
     fontSize: 17,
   },
   nameText: {
     paddingLeft: 10,
     color: '#cdd3d7',
-    fontFamily: 'HelveticaNeue-Light',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
     fontSize: 17,
   },
   priceText: {
     paddingLeft: 10,
     color: '#52a0ff',
-    fontFamily: 'HelveticaNeue-Light',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
     fontSize: 17,
   }
 }

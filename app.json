@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "crypto-cap",
-    "description": "An empty new project",
+    "description": "a cryptocurrency price tracking app",
     "slug": "crypto-cap",
     "privacy": "public",
     "sdkVersion": "20.0.0",
@@ -11,13 +11,21 @@
     "icon": "./assets/icons/app-icon.png",
     "loading": {
       "icon": "./assets/icons/loading-icon.png",
-      "hideExponentText": false
+      "backgroundColor": "#045076",
+      "hideExponentText": true
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4"]
     },
     "ios": {
+      "bundleIdentifier": "com.ziyang0621.cryptocap",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.ziyang00621.cryptocap"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#031622"
     }
   }
 }

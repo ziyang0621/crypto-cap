@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {
   FETCH_CRYPTO_LIST
 } from '../actions/types';
-const IMAGE_URL = 'https://files.coinmarketcap.com/static/img/coins/16x16/';
+const IMAGE_URL = 'https://files.coinmarketcap.com/static/img/coins/32x32/';
 
 export default function(state = { list: null, error: null }, action) {
   const { type, list, error } = action;
