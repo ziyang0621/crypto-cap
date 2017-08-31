@@ -38,6 +38,14 @@ class CryptoListScreen extends Component {
   }
 
   renderRow = (rowData, sectionId) => {
+    const percentColor = parseInt(rowData.percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+    const percentChangeStyle = {
+      paddingLeft: 10,
+      color: percentColor,
+      fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+      fontSize: 16,
+    }
+
     return (
       <ListItem
         containerStyle={styles.listItemContainerView}
@@ -57,7 +65,10 @@ class CryptoListScreen extends Component {
               <Text style={styles.rankText}>{rowData.rank}</Text>
               <Text style={styles.nameText}>{rowData.name}</Text>
             </View>
-            <Text style={styles.priceText}>${rowData.price_usd}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              <Text style={styles.priceText}>${rowData.price_usd}</Text>
+            <Text style={percentChangeStyle}>{rowData.percent_change_24h}%</Text>
+            </View>
           </View>
         }
       />
@@ -137,28 +148,28 @@ const styles = {
   titleView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 5,
+    paddingRight: 5,
     flexWrap: 'wrap',
   },
   rankText: {
-    paddingLeft: 10,
+    paddingLeft: 5,
     paddingRight: 5,
     color: '#cdd3d7',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 17,
+    fontSize: 16,
   },
   nameText: {
-    paddingLeft: 10,
+    paddingLeft: 5,
     color: '#cdd3d7',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 17,
+    fontSize: 16,
   },
   priceText: {
-    paddingLeft: 10,
+    paddingLeft: 5,
     color: '#52a0ff',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 17,
+    fontSize: 16,
   }
 }
 
