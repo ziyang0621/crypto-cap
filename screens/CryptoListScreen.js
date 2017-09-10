@@ -9,7 +9,7 @@ import {
   RefreshControl,
   ListView,
   Platform } from 'react-native';
-import { Header, Avatar, Icon, Button, List, ListItem } from 'react-native-elements';
+import { Header, Avatar, Button, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -50,7 +50,7 @@ class CryptoListScreen extends Component {
       <ListItem
         onPress={() => {
             this.props.selectCrypto(rowData);
-            this.props.navigation.navigate('CryptoDetail');
+            this.props.navigation.navigate('CryptoDetail', {name: rowData.name});
           }
         }
         containerStyle={styles.listItemContainerView}

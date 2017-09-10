@@ -13,14 +13,34 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class CryptoDetailScreen extends Component {
-  static navigationOptions = {
-    title: 'Detail Screen',
-  }
+  static navigationOptions = ({ navigation }) => ({
+    header: ({ navigate }) => {
+      return (
+        <Header
+          centerComponent={
+            <Text style={styles.headerTitleTextView}>
+              Details
+            </Text>
+          }
+          leftComponent={
+            <Icon
+              name="arrow-back"
+              color="#cdd3d7"
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          }
+          backgroundColor="#031622"
+        />
+      )
+    }
+  })
 
   renderCryptoDetailView = (crypto) => {
     const { id, name, symbol, price_usd, price_btc,
-      available_supply, total_supply,
-      market_cap_usd, percent_change_1h, percent_change_24h, percent_change_7d } = crypto;
+      available_supply, total_supply, market_cap_usd,
+      percent_change_1h, percent_change_24h, percent_change_7d } = crypto;
     return (
       <Card title={name} key={id}>
         <View style={styles.detailWrapper}>
@@ -43,7 +63,7 @@ class CryptoDetailScreen extends Component {
     const { cryptoInfo } = this.props;
     if (cryptoInfo && cryptoInfo.selectedCrypto) {
       return (
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           {this.renderCryptoDetailView(cryptoInfo.selectedCrypto)}
         </ScrollView>
       )
@@ -73,7 +93,7 @@ const styles = {
     fontFamily: Platform.OS === 'android' ? 'sans-serif' : 'HelveticaNeue-Light',
     fontSize: 20,
   },
-  listView: {
+  scrollView: {
     backgroundColor: '#031622',
     marginTop: 64,
   },
