@@ -48,6 +48,11 @@ class CryptoListScreen extends Component {
 
     return (
       <ListItem
+        onPress={() => {
+            this.props.selectCrypto(rowData);
+            this.props.navigation.navigate('CryptoDetail');
+          }
+        }
         containerStyle={styles.listItemContainerView}
         hideChevron={true}
         key={sectionId}
@@ -136,6 +141,8 @@ const styles = {
     marginTop: 64,
   },
   listItemContainerView: {
+    paddingTop: 15,
+    paddingBottom: 15,
     backgroundColor: '#031622',
     borderTopWidth: 0,
     borderBottomWidth: 1,
