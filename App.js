@@ -5,11 +5,13 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { StackNavigator } from 'react-navigation';
 import CryptoListScreen from './screens/CryptoListScreen';
+import CryptoDetailScreen from './screens/CryptoDetailScreen';
 
 export default class App extends React.Component {
   render() {
     const MainNavigator = StackNavigator({
-      CryptoList: { screen: CryptoListScreen }
+      CryptoList: { screen: CryptoListScreen },
+      CryptoDetail: { screen: CryptoDetailScreen }
     });
 
     return (

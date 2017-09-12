@@ -8,8 +8,10 @@ import {
   ActivityIndicator,
   RefreshControl,
   ListView,
-  Platform } from 'react-native';
-import { Header, Avatar, Icon, Button, List, ListItem } from 'react-native-elements';
+  Platform,
+  AppState
+} from 'react-native';
+import { Header, Avatar, Button, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -29,16 +31,33 @@ class CryptoListScreen extends Component {
     }
   }
 
-  state = { refreshing: false };
+  state = {
+    appState: AppState.currentState,
+    refreshing: false,
+  };
 
   componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
     this.props.fetchCryptoList('USD', 100, (list) => {
       console.log('the list', list);
     });
   }
 
+  componentWillUnmount() {
+     AppState.removeEventListener('change', this._handleAppStateChange);
+   }
+
+   _handleAppStateChange = (nextAppState) => {
+     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+       this.props.fetchCryptoList('USD', 100, (list) => {
+         console.log('the list', list);
+       });
+     }
+     this.setState({appState: nextAppState});
+  }
+
   renderRow = (rowData, sectionId) => {
-    const percentColor = parseInt(rowData.percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+    const percentColor = parseFloat(rowData.percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
     const percentChangeStyle = {
       paddingLeft: 10,
       color: percentColor,
@@ -48,6 +67,11 @@ class CryptoListScreen extends Component {
 
     return (
       <ListItem
+        onPress={() => {
+            this.props.selectCrypto(rowData);
+            this.props.navigation.navigate('CryptoDetail', {name: rowData.name});
+          }
+        }
         containerStyle={styles.listItemContainerView}
         hideChevron={true}
         key={sectionId}
@@ -105,7 +129,6 @@ class CryptoListScreen extends Component {
   }
 
   render() {
-    console.log('CryptoListScreen render');
     const { cryptoInfo } = this.props;
 
     if (cryptoInfo && cryptoInfo.list) {
@@ -136,6 +159,8 @@ const styles = {
     marginTop: 64,
   },
   listItemContainerView: {
+    paddingTop: 15,
+    paddingBottom: 15,
     backgroundColor: '#031622',
     borderTopWidth: 0,
     borderBottomWidth: 1,
