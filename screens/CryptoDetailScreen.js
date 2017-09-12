@@ -5,10 +5,8 @@ import {
   View,
   Text,
   ActivityIndicator,
-  RefreshControl,
-  ListView,
   Platform } from 'react-native';
-import { Header, Avatar, Icon, Button, Card } from 'react-native-elements';
+import { Header, Avatar, Icon, Button, Card, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -26,6 +24,7 @@ class CryptoDetailScreen extends Component {
             <Icon
               name="arrow-back"
               color="#cdd3d7"
+              size={30}
               onPress={() => {
                 navigation.goBack();
               }}
@@ -38,28 +37,74 @@ class CryptoDetailScreen extends Component {
   })
 
   renderCryptoDetailView = (crypto) => {
-    const { id, name, symbol, price_usd, price_btc,
+    const { id, name, symbol, image_url, price_usd, price_btc,
       available_supply, total_supply, market_cap_usd,
       percent_change_1h, percent_change_24h, percent_change_7d } = crypto;
+
+    const oneHourPercentColor = parseFloat(percent_change_1h) >= 0 ? '#65cc00' : '#e6323d';
+    const twentyFourHourPercentColor = parseFloat(percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+    const sevenDayPercentColor = parseFloat(percent_change_7d) >= 0 ? '#65cc00' : '#e6323d';
+
     return (
-      <Card title={name} key={id}>
+      <Card
+        title={name}
+        key={id}
+        titleStyle={styles.cardTitle}
+        containerStyle={styles.cardContainer}
+        >
         <View style={styles.detailWrapper}>
-          <Text>Market Cap: ${market_cap_usd}</Text>
-          <Text>24 Hour Volume: ${crypto['24h_volume_usd']}</Text>
-          <Text>Available Supply: {available_supply} {symbol}</Text>
-          <Text>Total Supply: {total_supply} {symbol}</Text>
-          <Text>Price: ${price_usd}</Text>
-          <Text>Price BTC: {price_btc} BTC</Text>
-          <Text>% Change(1h): {percent_change_1h}%</Text>
-          <Text>% Change(24h): {percent_change_24h}%</Text>
-          <Text>% Change(7d): {percent_change_7d}%</Text>
+          <View style={styles.imageContainer}>
+            <Avatar
+              containerStyle={styles.avatar}
+              medium
+              rounded
+              source={{ uri: image_url }}
+            />
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Market Cap:</Text>
+            <Text style={styles.cardAmountText}>${market_cap_usd}</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>24 Hour Volume:</Text>
+            <Text style={styles.cardAmountText}>${crypto['24h_volume_usd']}</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Available Supply:</Text>
+            <Text style={styles.cardAmountText}>{available_supply} {symbol}</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Total Supply:</Text>
+            <Text style={styles.cardAmountText}>{total_supply} {symbol}</Text>
+          </View>
+          <Divider style={styles.divider} />
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Price:</Text>
+            <Text style={styles.cardAmountText}>${price_usd}</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Price BTC:</Text>
+            <Text style={styles.cardAmountText}>{price_btc} BTC</Text>
+          </View>
+          <Divider style={styles.divider} />
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>% Change (1h):</Text>
+            <Text style={{ ...styles.percentChange, color: oneHourPercentColor }}>{percent_change_1h}%</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>% Change (24h):</Text>
+            <Text style={{ ...styles.percentChange, color: twentyFourHourPercentColor }}>{percent_change_24h}%</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>% Change (7d):</Text>
+            <Text style={{ ...styles.percentChange, color: sevenDayPercentColor }}>{percent_change_7d}%</Text>
+          </View>
         </View>
       </Card>
     );
   }
 
   render() {
-    console.log('CryptoDetailScreen render', this.props);
     const { cryptoInfo } = this.props;
     if (cryptoInfo && cryptoInfo.selectedCrypto) {
       return (
@@ -76,12 +121,6 @@ class CryptoDetailScreen extends Component {
 }
 
 const styles = {
-  detailWrapper: {
-    marginTop: 10,
-    marginBottom: 10,
-    flexDirection: 'column',
-    justifyContent: 'space-around'
-  },
   loadingView: {
     flex: 1,
     backgroundColor: '#031622',
@@ -97,43 +136,54 @@ const styles = {
     backgroundColor: '#031622',
     marginTop: 64,
   },
-  listItemContainerView: {
-    paddingTop: 15,
-    paddingBottom: 15,
+  cardContainer: {
     backgroundColor: '#031622',
-    borderTopWidth: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: '#787c7f',
+    borderWidth: 0.5,
+    borderColor: '#ebe9f2',
   },
-  avatarContainerView: {
-    borderWidth: 0.2,
-    borderColor: '#909499',
+  detailWrapper: {
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
   },
-  titleView: {
+  cardTextView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 5,
-    paddingRight: 5,
-    flexWrap: 'wrap',
+    paddingBottom: 10
   },
-  rankText: {
-    paddingLeft: 5,
-    paddingRight: 5,
+  cardTitle: {
     color: '#cdd3d7',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16,
+    fontSize: 22,
   },
-  nameText: {
-    paddingLeft: 5,
+  cardText: {
     color: '#cdd3d7',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16,
+    fontSize: 18,
   },
-  priceText: {
-    paddingLeft: 5,
+  cardAmountText: {
     color: '#52a0ff',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16,
+    fontSize: 18,
+  },
+  percentChange: {
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 18,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 10
+  },
+  avatar: {
+    borderWidth: 2,
+    borderColor: '#909499',
+  },
+  divider: {
+    backgroundColor: '#cdd3d7',
+    marginTop: 20,
+    marginBottom: 20
   }
 }
 
