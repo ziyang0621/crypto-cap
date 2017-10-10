@@ -149,6 +149,7 @@ const styles = {
   },
   cardTextView: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingBottom: 10
   },

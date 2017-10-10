@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { Constants } from 'expo';
 import {
   StyleSheet,
@@ -11,7 +12,7 @@ import {
   Platform,
   AppState
 } from 'react-native';
-import { Header, Avatar, Button, List, ListItem } from 'react-native-elements';
+import { Header, Avatar, Button, List, ListItem, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -33,6 +34,7 @@ class CryptoListScreen extends Component {
 
   state = {
     appState: AppState.currentState,
+    searchText: '',
     refreshing: false,
   };
 
@@ -91,7 +93,7 @@ class CryptoListScreen extends Component {
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <Text style={styles.priceText}>${rowData.price_usd}</Text>
-            <Text style={percentChangeStyle}>{rowData.percent_change_24h}%</Text>
+              <Text style={percentChangeStyle}>{rowData.percent_change_24h}%</Text>
             </View>
           </View>
         }
@@ -106,6 +108,7 @@ class CryptoListScreen extends Component {
     return (
       <List style={styles.listView}>
         <ListView
+          enableEmptySections={true}
           renderRow={this.renderRow}
           dataSource={dataSource}
           refreshControl={
@@ -120,7 +123,6 @@ class CryptoListScreen extends Component {
   }
 
   onRefresh = () => {
-    console.log('refreshing....');
     this.setState({ refreshing: true });
     this.props.fetchCryptoList('USD', 100, (list) => {
       console.log('finished fetching list');
@@ -128,12 +130,36 @@ class CryptoListScreen extends Component {
     });
   }
 
+  searchTextChange = (searchText) => {
+    this.setState({
+      searchText: searchText
+    });
+  }
+
   render() {
     const { cryptoInfo } = this.props;
+    const { searchText } = this.state;
 
     if (cryptoInfo && cryptoInfo.list) {
+      let inputList = cryptoInfo.list;
+      if (searchText) {
+        inputList = _.filter(inputList, item => {
+          return ((item.symbol.toLowerCase().indexOf(searchText.toLowerCase()) !== -1) ||
+            item.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1);
+        });
+      }
+      const cryptoList = this.renderList(inputList);
       return (
-        this.renderList(cryptoInfo.list)
+        <View
+          style={{ flex: 1, paddingTop: 70, backgroundColor: '#031622' }}
+          >
+          <SearchBar
+            containerStyle={{ backgroundColor: '#031622' }}
+            clearIcon={{ color: '#86939e', name: 'clear' }}
+            onChangeText={this.searchTextChange}
+            placeholder='Search' />
+          {cryptoList}
+        </View>
       );
     }
     return (
@@ -156,7 +182,6 @@ const styles = {
   },
   listView: {
     backgroundColor: '#031622',
-    marginTop: 64,
   },
   listItemContainerView: {
     paddingTop: 15,
