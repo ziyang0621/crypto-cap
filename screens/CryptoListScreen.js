@@ -156,7 +156,9 @@ class CryptoListScreen extends Component {
           <SearchBar
             containerStyle={{ backgroundColor: '#031622' }}
             clearIcon={{ color: '#86939e', name: 'clear' }}
+            autoCorrect={false}
             onChangeText={this.searchTextChange}
+            returnKeyType='done'
             placeholder='Search' />
           {cryptoList}
         </View>
