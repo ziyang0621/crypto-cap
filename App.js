@@ -24,15 +24,10 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <TouchableWithoutFeedback
-          onPress={Keyboard.dismiss}
-        >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
-            <StatusBar
-               backgroundColor="#031622"
-               barStyle="light-content"
-            />
-            <MainNavigator/>
+            <StatusBar backgroundColor="#031622" barStyle="light-content" />
+            <MainNavigator />
           </View>
         </TouchableWithoutFeedback>
       </Provider>
@@ -43,6 +38,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#031622',
-  },
+    backgroundColor: '#031622'
+  }
 });

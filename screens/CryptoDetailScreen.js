@@ -5,8 +5,16 @@ import {
   View,
   Text,
   ActivityIndicator,
-  Platform } from 'react-native';
-import { Header, Avatar, Icon, Button, Card, Divider } from 'react-native-elements';
+  Platform
+} from 'react-native';
+import {
+  Header,
+  Avatar,
+  Icon,
+  Button,
+  Card,
+  Divider
+} from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -16,9 +24,7 @@ class CryptoDetailScreen extends Component {
       return (
         <Header
           centerComponent={
-            <Text style={styles.headerTitleTextView}>
-              Details
-            </Text>
+            <Text style={styles.headerTitleTextView}>Details</Text>
           }
           leftComponent={
             <Icon
@@ -32,18 +38,32 @@ class CryptoDetailScreen extends Component {
           }
           backgroundColor="#031622"
         />
-      )
+      );
     }
-  })
+  });
 
-  renderCryptoDetailView = (crypto) => {
-    const { id, name, symbol, image_url, price_usd, price_btc,
-      available_supply, total_supply, market_cap_usd,
-      percent_change_1h, percent_change_24h, percent_change_7d } = crypto;
+  renderCryptoDetailView = crypto => {
+    const {
+      id,
+      name,
+      symbol,
+      image_url,
+      price_usd,
+      price_btc,
+      available_supply,
+      total_supply,
+      market_cap_usd,
+      percent_change_1h,
+      percent_change_24h,
+      percent_change_7d
+    } = crypto;
 
-    const oneHourPercentColor = parseFloat(percent_change_1h) >= 0 ? '#65cc00' : '#e6323d';
-    const twentyFourHourPercentColor = parseFloat(percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
-    const sevenDayPercentColor = parseFloat(percent_change_7d) >= 0 ? '#65cc00' : '#e6323d';
+    const oneHourPercentColor =
+      parseFloat(percent_change_1h) >= 0 ? '#65cc00' : '#e6323d';
+    const twentyFourHourPercentColor =
+      parseFloat(percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+    const sevenDayPercentColor =
+      parseFloat(percent_change_7d) >= 0 ? '#65cc00' : '#e6323d';
 
     return (
       <Card
@@ -51,7 +71,7 @@ class CryptoDetailScreen extends Component {
         key={id}
         titleStyle={styles.cardTitle}
         containerStyle={styles.cardContainer}
-        >
+      >
         <View style={styles.detailWrapper}>
           <View style={styles.imageContainer}>
             <Avatar
@@ -67,15 +87,21 @@ class CryptoDetailScreen extends Component {
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>24 Hour Volume:</Text>
-            <Text style={styles.cardAmountText}>${crypto['24h_volume_usd']}</Text>
+            <Text style={styles.cardAmountText}>
+              ${crypto['24h_volume_usd']}
+            </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Available Supply:</Text>
-            <Text style={styles.cardAmountText}>{available_supply} {symbol}</Text>
+            <Text style={styles.cardAmountText}>
+              {available_supply} {symbol}
+            </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Total Supply:</Text>
-            <Text style={styles.cardAmountText}>{total_supply} {symbol}</Text>
+            <Text style={styles.cardAmountText}>
+              {total_supply} {symbol}
+            </Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.cardTextView}>
@@ -89,20 +115,35 @@ class CryptoDetailScreen extends Component {
           <Divider style={styles.divider} />
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>% Change (1h):</Text>
-            <Text style={{ ...styles.percentChange, color: oneHourPercentColor }}>{percent_change_1h}%</Text>
+            <Text
+              style={{ ...styles.percentChange, color: oneHourPercentColor }}
+            >
+              {percent_change_1h}%
+            </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>% Change (24h):</Text>
-            <Text style={{ ...styles.percentChange, color: twentyFourHourPercentColor }}>{percent_change_24h}%</Text>
+            <Text
+              style={{
+                ...styles.percentChange,
+                color: twentyFourHourPercentColor
+              }}
+            >
+              {percent_change_24h}%
+            </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>% Change (7d):</Text>
-            <Text style={{ ...styles.percentChange, color: sevenDayPercentColor }}>{percent_change_7d}%</Text>
+            <Text
+              style={{ ...styles.percentChange, color: sevenDayPercentColor }}
+            >
+              {percent_change_7d}%
+            </Text>
           </View>
         </View>
       </Card>
     );
-  }
+  };
 
   render() {
     const { cryptoInfo } = this.props;
@@ -111,12 +152,10 @@ class CryptoDetailScreen extends Component {
         <ScrollView style={styles.scrollView}>
           {this.renderCryptoDetailView(cryptoInfo.selectedCrypto)}
         </ScrollView>
-      )
+      );
     }
 
-    return (
-      <ActivityIndicator size='large' style={styles.loadingView}/>
-    );
+    return <ActivityIndicator size="large" style={styles.loadingView} />;
   }
 }
 
@@ -125,27 +164,28 @@ const styles = {
     flex: 1,
     backgroundColor: '#031622',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   headerTitleTextView: {
     color: '#cdd3d7',
-    fontFamily: Platform.OS === 'android' ? 'sans-serif' : 'HelveticaNeue-Light',
-    fontSize: 20,
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif' : 'HelveticaNeue-Light',
+    fontSize: 20
   },
   scrollView: {
     backgroundColor: '#031622',
-    marginTop: 64,
+    marginTop: 64
   },
   cardContainer: {
     backgroundColor: '#031622',
     borderWidth: 0.5,
-    borderColor: '#ebe9f2',
+    borderColor: '#ebe9f2'
   },
   detailWrapper: {
     marginTop: 10,
     marginBottom: 10,
     flexDirection: 'column',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   cardTextView: {
     flexDirection: 'row',
@@ -155,22 +195,26 @@ const styles = {
   },
   cardTitle: {
     color: '#cdd3d7',
-    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 22,
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 22
   },
   cardText: {
     color: '#cdd3d7',
-    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 18,
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 18
   },
   cardAmountText: {
     color: '#52a0ff',
-    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 18,
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 18
   },
   percentChange: {
-    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 18,
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 18
   },
   imageContainer: {
     flexDirection: 'row',
@@ -179,14 +223,14 @@ const styles = {
   },
   avatar: {
     borderWidth: 2,
-    borderColor: '#909499',
+    borderColor: '#909499'
   },
   divider: {
     backgroundColor: '#cdd3d7',
     marginTop: 20,
     marginBottom: 20
   }
-}
+};
 
 function mapStateToProps({ cryptoInfo }) {
   return { cryptoInfo: cryptoInfo };
