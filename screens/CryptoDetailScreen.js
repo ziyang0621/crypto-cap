@@ -50,6 +50,7 @@ class CryptoDetailScreen extends Component {
       image_url,
       price_usd,
       price_btc,
+      price_eth,
       available_supply,
       total_supply,
       market_cap_usd,
@@ -111,6 +112,10 @@ class CryptoDetailScreen extends Component {
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Price BTC:</Text>
             <Text style={styles.cardAmountText}>{price_btc} BTC</Text>
+          </View>
+          <View style={styles.cardTextView}>
+            <Text style={styles.cardText}>Price ETH:</Text>
+            <Text style={styles.cardAmountText}>{price_eth} ETH</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.cardTextView}>

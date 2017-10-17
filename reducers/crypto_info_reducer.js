@@ -11,9 +11,57 @@ export default function(
     case SELECT_CRYPTO:
       return { ...state, selectedCrypto: crypto };
     case FETCH_CRYPTO_LIST:
+      let btcItem = {};
+      let ethItem = {};
+      _.forEach(list, item => {
+        if (item.id === 'bitcoin') {
+          btcItem = item;
+        }
+
+        if (item.id === 'ethereum') {
+          ethItem = item;
+        }
+      });
+
       let cryptoList = _.forEach(list, item => {
         const imageFileName = item.id.replace(' ', '-') + '.png';
         item.image_url = IMAGE_URL + imageFileName;
+
+        if (!_.isEmpty(btcItem)) {
+          const btcPriceYesterday =
+            parseFloat(btcItem.price_usd) /
+            (1 + parseFloat(btcItem.percent_change_24h) / 100);
+          const itemPriceInUsdYesterday =
+            parseFloat(item.price_usd) /
+            (1 + parseFloat(item.percent_change_24h) / 100);
+          const itemPriceInBtcYesterday =
+            itemPriceInUsdYesterday / parseFloat(btcPriceYesterday);
+          const btcPercentDiff =
+            (parseFloat(item.price_btc) / itemPriceInBtcYesterday - 1) * 100;
+          item.price_yesterday_usd = itemPriceInUsdYesterday;
+          item.price_yesterday_btc = itemPriceInBtcYesterday;
+          item.price_btc = parseFloat(item.price_btc).toFixed(8);
+          item.percent_change_24h_btc = btcPercentDiff.toFixed(2);
+        }
+
+        if (!_.isEmpty(ethItem)) {
+          const ethPriceYesterday =
+            parseFloat(ethItem.price_usd) /
+            (1 + parseFloat(ethItem.percent_change_24h) / 100);
+          const itemPriceInUsdYesterday =
+            parseFloat(item.price_usd) /
+            (1 + parseFloat(item.percent_change_24h) / 100);
+          const itemPriceInEthYesterday =
+            itemPriceInUsdYesterday / parseFloat(ethPriceYesterday);
+          const itemPriceInEthToday =
+            parseFloat(item.price_usd) / parseFloat(ethItem.price_usd);
+          const ethPercentDiff =
+            (itemPriceInEthToday / itemPriceInEthYesterday - 1) * 100;
+          item.price_yesterday_usd = itemPriceInUsdYesterday;
+          item.price_yesterday_eth = itemPriceInEthYesterday;
+          item.price_eth = itemPriceInEthToday.toFixed(8);
+          item.percent_change_24h_eth = ethPercentDiff.toFixed(2);
+        }
       });
       return { ...state, list: cryptoList, error };
     default:

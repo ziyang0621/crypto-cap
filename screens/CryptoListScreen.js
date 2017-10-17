@@ -18,24 +18,57 @@ import {
   Button,
   List,
   ListItem,
+  Icon,
   SearchBar
 } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
+const infoList = ['price_usd', 'price_btc', 'price_eth'];
+
 class CryptoListScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     header: ({ navigate }) => {
+      const { state, setParams } = navigation;
+      let headerTitleText = 'Price (USD)';
+      if (state.params) {
+        const { infoListIndex } = state.params;
+        if (infoList[infoListIndex] === 'price_usd') {
+          headerTitleText = 'Price (USD)';
+        } else if (infoList[infoListIndex] === 'price_btc') {
+          headerTitleText = 'Price (BTC)';
+        } else if (infoList[infoListIndex] === 'price_eth') {
+          headerTitleText = 'Price (ETH)';
+        }
+      }
       return (
         <Header
           centerComponent={
-            <Text style={styles.headerTitleTextView}>Crypto Cap</Text>
+            <Text style={styles.headerTitleTextView}>{headerTitleText}</Text>
+          }
+          rightComponent={
+            <Icon
+              name="exchange"
+              type="font-awesome"
+              color="#cdd3d7"
+              size={25}
+              onPress={() => {
+                if (state.params) {
+                  const { infoListIndex } = state.params;
+                  if (infoListIndex === infoList.length - 1) {
+                    setParams({ infoListIndex: 0 });
+                  } else {
+                    setParams({ infoListIndex: infoListIndex + 1 });
+                  }
+                }
+              }}
+            />
           }
           backgroundColor="#031622"
         />
       );
     }
-  };
+  });
 
   state = {
     appState: AppState.currentState,
@@ -48,6 +81,7 @@ class CryptoListScreen extends Component {
     this.props.fetchCryptoList('USD', 100, list => {
       console.log('the list', list);
     });
+    this.props.navigation.setParams({ infoListIndex: 0 });
   }
 
   componentWillUnmount() {
@@ -66,9 +100,27 @@ class CryptoListScreen extends Component {
     this.setState({ appState: nextAppState });
   };
 
-  renderRow = (rowData, sectionId) => {
-    const percentColor =
-      parseFloat(rowData.percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+  renderRowInfo = (rowData, infoListItem) => {
+    let priceText = '';
+    let percentText = '';
+    let percentColor = '#65cc00';
+    if (infoListItem === 'price_usd') {
+      percentColor =
+        parseFloat(rowData.percent_change_24h) >= 0 ? '#65cc00' : '#e6323d';
+      priceText = '$' + rowData.price_usd;
+      percentText = rowData.percent_change_24h + '%';
+    } else if (infoListItem === 'price_btc') {
+      percentColor =
+        rowData.percent_change_24h_btc >= 0 ? '#65cc00' : '#e6323d';
+      priceText = rowData.price_btc + ' BTC';
+      percentText = rowData.percent_change_24h_btc + '%';
+    } else if (infoListItem === 'price_eth') {
+      percentColor =
+        rowData.percent_change_24h_eth >= 0 ? '#65cc00' : '#e6323d';
+      priceText = rowData.price_eth + ' ETH';
+      percentText = rowData.percent_change_24h_eth + '%';
+    }
+
     const percentChangeStyle = {
       paddingLeft: 10,
       color: percentColor,
@@ -76,6 +128,19 @@ class CryptoListScreen extends Component {
         Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
       fontSize: 16
     };
+
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+        <Text style={styles.priceText}>{priceText}</Text>
+        <Text style={percentChangeStyle}>{percentText}</Text>
+      </View>
+    );
+  };
+
+  renderRow = (rowData, sectionId) => {
+    const { infoListIndex } = this.props.navigation.state.params;
+
+    const infoView = this.renderRowInfo(rowData, infoList[infoListIndex]);
 
     return (
       <ListItem
@@ -104,14 +169,7 @@ class CryptoListScreen extends Component {
               <Text style={styles.rankText}>{rowData.rank}</Text>
               <Text style={styles.nameText}>{rowData.name}</Text>
             </View>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-around' }}
-            >
-              <Text style={styles.priceText}>${rowData.price_usd}</Text>
-              <Text style={percentChangeStyle}>
-                {rowData.percent_change_24h}%
-              </Text>
-            </View>
+            {infoView}
           </View>
         }
       />
@@ -158,6 +216,7 @@ class CryptoListScreen extends Component {
   render() {
     const { cryptoInfo } = this.props;
     const { searchText } = this.state;
+    console.log('render', this.props);
 
     if (cryptoInfo && cryptoInfo.list) {
       let inputList = cryptoInfo.list;
@@ -203,7 +262,8 @@ const styles = {
     fontSize: 20
   },
   listView: {
-    backgroundColor: '#031622'
+    backgroundColor: '#031622',
+    paddingBottom: 70
   },
   listItemContainerView: {
     paddingTop: 15,
