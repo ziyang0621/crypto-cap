@@ -20,11 +20,11 @@
     "ios": {
       "bundleIdentifier": "com.ziyang0621.cryptocap",
       "supportsTablet": true,
-      "buildNumber": 5
+      "buildNumber": 6
     },
     "android": {
       "package": "com.ziyang00621.cryptocap",
-      "versionCode": 5
+      "versionCode": 6
     },
     "androidStatusBar": {
       "backgroundColor": "#031622"

@@ -77,11 +77,11 @@ class CryptoListScreen extends Component {
   };
 
   componentDidMount() {
+    this.props.navigation.setParams({ infoListIndex: 0 });
     AppState.addEventListener('change', this._handleAppStateChange);
     this.props.fetchCryptoList('USD', 100, list => {
       console.log('the list', list);
     });
-    this.props.navigation.setParams({ infoListIndex: 0 });
   }
 
   componentWillUnmount() {

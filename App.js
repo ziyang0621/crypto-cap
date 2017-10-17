@@ -1,14 +1,6 @@
 import React from 'react';
 import { Constants } from 'expo';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './store';
 import { StackNavigator } from 'react-navigation';
@@ -24,12 +16,10 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <StatusBar backgroundColor="#031622" barStyle="light-content" />
-            <MainNavigator />
-          </View>
-        </TouchableWithoutFeedback>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#031622" barStyle="light-content" />
+          <MainNavigator />
+        </View>
       </Provider>
     );
   }
