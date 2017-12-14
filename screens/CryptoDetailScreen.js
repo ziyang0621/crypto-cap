@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import moment from 'moment';
+import _ from 'lodash';
 import {
   StyleSheet,
   ScrollView,
@@ -17,6 +19,7 @@ import {
 } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import LineChart from '../components/LineChart';
 
 class CryptoDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -42,6 +45,25 @@ class CryptoDetailScreen extends Component {
     }
   });
 
+  componentDidMount() {
+    const { cryptoInfo } = this.props;
+
+    if (cryptoInfo && cryptoInfo.selectedCrypto) {
+      const yesterday = moment()
+        .add(-1, 'days')
+        .valueOf();
+      const today = moment().valueOf();
+      this.props.fetchChartData(
+        cryptoInfo.selectedCrypto.id,
+        yesterday,
+        today,
+        (chartData, error) => {
+          console.log('the chart data', chartData, error);
+        }
+      );
+    }
+  }
+
   renderCryptoDetailView = crypto => {
     const {
       id,
@@ -66,6 +88,22 @@ class CryptoDetailScreen extends Component {
     const sevenDayPercentColor =
       parseFloat(percent_change_7d) >= 0 ? '#65cc00' : '#e6323d';
 
+    console.log('the props inside', this.props);
+    let chartView = <View />;
+    const { selectedChartData } = this.props.cryptoInfo;
+    if (selectedChartData) {
+      const priceData = _.map(selectedChartData.price_usd, price => {
+        const time = moment(price[0]).format('hh:mm a');
+        return { x: price[0], y: price[1], time: time };
+      });
+
+      chartView = (
+        <View style={styles.chartView}>
+          <LineChart chartData={priceData} />
+        </View>
+      );
+    }
+
     return (
       <Card
         title={name}
@@ -82,6 +120,7 @@ class CryptoDetailScreen extends Component {
               source={{ uri: image_url }}
             />
           </View>
+          {chartView}
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Market Cap:</Text>
             <Text style={styles.cardAmountText}>${market_cap_usd}</Text>
@@ -152,6 +191,7 @@ class CryptoDetailScreen extends Component {
 
   render() {
     const { cryptoInfo } = this.props;
+
     if (cryptoInfo && cryptoInfo.selectedCrypto) {
       return (
         <ScrollView style={styles.scrollView}>
@@ -191,6 +231,11 @@ const styles = {
     marginBottom: 10,
     flexDirection: 'column',
     justifyContent: 'space-around'
+  },
+  chartView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 10
   },
   cardTextView: {
     flexDirection: 'row',
