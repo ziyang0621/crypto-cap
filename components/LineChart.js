@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Svg from 'react-native-svg';
 import moment from 'moment';
 import _ from 'lodash';
 import { View } from 'react-native';
@@ -12,21 +11,23 @@ import {
   Line
 } from 'victory-native';
 
-class CrossLine extends React.Component {
+class CrossLine extends Component {
   render() {
-    // const { height, width, padding } = this.props.theme.chart;
-    console.log('the crossLine props', this.props);
+    if (!this.props || !this.props.theme || !this.props.theme.chart) {
+      return <View />;
+    }
+
+    const { height, width, padding } = this.props.theme.chart;
     return (
-      // <Line
-      //   x1={this.props.x}
-      //   x2={this.props.x}
-      //   y1={padding}
-      //   y2={height - padding}
-      //   style={{
-      //     stroke: 'red'
-      //   }}
-      // />
-      <View />
+      <Line
+        x1={this.props.x}
+        x2={this.props.x}
+        y1={padding}
+        y2={height - padding}
+        style={{
+          stroke: 'white'
+        }}
+      />
     );
   }
 }
@@ -38,41 +39,46 @@ class LineChart extends Component {
       return <View />;
     }
 
-    console.log('the line chart data', chartData);
-
     return (
       <View>
         <VictoryChart
-          // theme={VictoryTheme.material}
+          theme={VictoryTheme.material}
           containerComponent={
             <VictoryVoronoiContainer
               voronoiDimension="x"
               labels={d => `x: ${d.x} y: ${d.y}`}
+              labelComponent={<CrossLine />}
+              onActivated={(points, props) => {
+                _.forEach(chartData, (dataPoint, key) => {
+                  if (dataPoint.x === points[0].x) {
+                    this.props.onDataPointTouchStart(dataPoint);
+                  }
+                });
+              }}
+              onTouchStart={() => {
+                this.props.onTouchStart();
+              }}
+              onTouchEnd={() => {
+                this.props.onTouchEnd();
+              }}
             />
           }
         >
-          {/* <VictoryAxis
-            dependentAxis
-            // style={{
-            //   axis: { stroke: 'white' },
-            //   grid: { opacity: 0 },
-            //   ticks: { opacity: 0 }
-            // }}
-          /> */}
           <VictoryLine
-            // interpolation="natural"
+            interpolation="natural"
             data={chartData}
-            // style={{
-            //   data: { stroke: 'white' }
-            // }}
+            style={{
+              data: { stroke: '#52a0ff' }
+            }}
           />
-          {/* <VictoryAxis
-          // style={{
-          //   axis: { stroke: 'white' },
-          //   grid: { opacity: 0 },
-          //   ticks: { opacity: 0 }
-          // }}
-          /> */}
+          <VictoryAxis
+            style={{
+              axis: { stroke: 'grey' },
+              grid: { opacity: 0 },
+              ticks: { opacity: 0 },
+              tickLabels: { opacity: 0 }
+            }}
+          />
         </VictoryChart>
       </View>
     );

@@ -2,7 +2,8 @@ import _ from 'lodash';
 import {
   FETCH_CRYPTO_LIST,
   SELECT_CRYPTO,
-  FETCH_CHART_DATA
+  FETCH_CHART_DATA,
+  CLEAR_CHART_DATA
 } from '../actions/types';
 const IMAGE_URL = 'https://files.coinmarketcap.com/static/img/coins/32x32/';
 
@@ -21,6 +22,8 @@ export default function(
       return { ...state, selectedCrypto: crypto };
     case FETCH_CHART_DATA:
       return { ...state, selectedChartData: chartData };
+    case CLEAR_CHART_DATA:
+      return { ...state, selectedChartData: null };
     case FETCH_CRYPTO_LIST:
       let btcItem = {};
       let ethItem = {};

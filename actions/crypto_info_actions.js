@@ -1,11 +1,20 @@
 import axios from 'axios';
-import { FETCH_CRYPTO_LIST, SELECT_CRYPTO, FETCH_CHART_DATA } from './types';
+import {
+  FETCH_CRYPTO_LIST,
+  SELECT_CRYPTO,
+  FETCH_CHART_DATA,
+  CLEAR_CHART_DATA
+} from './types';
 
 const COINS_URL = 'https://api.coinmarketcap.com/v1/ticker';
 const CHART_DATA_URL = 'https://graphs.coinmarketcap.com/currencies';
 
 export const selectCrypto = crypto => {
   return { type: SELECT_CRYPTO, crypto: crypto };
+};
+
+export const clearChartData = () => {
+  return { type: CLEAR_CHART_DATA };
 };
 
 export const fetchChartData = (
