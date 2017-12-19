@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import moment from 'moment';
+import _ from 'lodash';
 import {
   StyleSheet,
   ScrollView,
@@ -17,6 +19,7 @@ import {
 } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import LineChart from '../components/LineChart';
 
 class CryptoDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -42,6 +45,48 @@ class CryptoDetailScreen extends Component {
     }
   });
 
+  state = {
+    selectedDataPoint: {},
+    lineChartTouched: false
+  };
+
+  componentDidMount() {
+    const { cryptoInfo } = this.props;
+
+    if (cryptoInfo && cryptoInfo.selectedCrypto) {
+      this.props.clearChartData();
+      const yesterday = moment()
+        .add(-1, 'days')
+        .valueOf();
+      const today = moment().valueOf();
+      this.props.fetchChartData(
+        cryptoInfo.selectedCrypto.id,
+        yesterday,
+        today,
+        (chartData, error) => {
+          console.log('the chart data', chartData, error);
+        }
+      );
+    }
+  }
+
+  renderChartLoadingView = () => {
+    return (
+      <View style={styles.chartLoadingView}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            paddingBottom: 20
+          }}
+        >
+          <Text style={styles.loadingChartText}>Loading Chart...</Text>
+        </View>
+        <ActivityIndicator size="large" style={styles.loadingView} />
+      </View>
+    );
+  };
+
   renderCryptoDetailView = crypto => {
     const {
       id,
@@ -66,6 +111,93 @@ class CryptoDetailScreen extends Component {
     const sevenDayPercentColor =
       parseFloat(percent_change_7d) >= 0 ? '#65cc00' : '#e6323d';
 
+    let chartView = this.renderChartLoadingView();
+    const { selectedChartData } = this.props.cryptoInfo;
+    if (selectedChartData) {
+      const priceData = _.map(selectedChartData.price_usd, price => {
+        const time = moment(price[0]).format('hh:mm a');
+        return { x: price[0], y: price[1], time: time };
+      });
+
+      const { selectedDataPoint } = this.state;
+      let dataInfoView = <View />;
+      if (!_.isEmpty(selectedDataPoint)) {
+        dataInfoView = (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingTop: 20,
+              marginBottom: -40
+            }}
+          >
+            <Text style={styles.selectedPriceText}>
+              ${selectedDataPoint.y}{' '}
+            </Text>
+            <Text style={styles.selectedTimeText}>
+              {selectedDataPoint.time}
+            </Text>
+          </View>
+        );
+      } else {
+        dataInfoView = (
+          <Text
+            style={{
+              ...styles.selectedPriceText,
+              textAlign: 'center',
+              paddingTop: 20,
+              marginBottom: -40
+            }}
+          >
+            ${price_usd}
+          </Text>
+        );
+      }
+
+      chartView = (
+        <View style={styles.chartView}>
+          {dataInfoView}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}
+          >
+            <LineChart
+              chartData={priceData}
+              onDataPointTouchStart={dataPoint => {
+                this.setState({
+                  selectedDataPoint: dataPoint
+                });
+              }}
+              onTouchStart={() => {
+                this.setState({
+                  lineChartTouched: true
+                });
+              }}
+              onTouchEnd={() => {
+                this.setState({
+                  lineChartTouched: false,
+                  selectedDataPoint: {}
+                });
+              }}
+            />
+          </View>
+          <Text
+            style={{
+              ...styles.cardText,
+              marginTop: -40,
+              marginBottom: 20,
+              textAlign: 'center'
+            }}
+          >
+            24 Hours Price
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <Card
         title={name}
@@ -82,6 +214,7 @@ class CryptoDetailScreen extends Component {
               source={{ uri: image_url }}
             />
           </View>
+          {chartView}
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Market Cap:</Text>
             <Text style={styles.cardAmountText}>${market_cap_usd}</Text>
@@ -152,9 +285,13 @@ class CryptoDetailScreen extends Component {
 
   render() {
     const { cryptoInfo } = this.props;
+
     if (cryptoInfo && cryptoInfo.selectedCrypto) {
       return (
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          scrollEnabled={!this.state.lineChartTouched}
+        >
           {this.renderCryptoDetailView(cryptoInfo.selectedCrypto)}
         </ScrollView>
       );
@@ -178,8 +315,7 @@ const styles = {
     fontSize: 20
   },
   scrollView: {
-    backgroundColor: '#031622',
-    marginTop: 64
+    backgroundColor: '#031622'
   },
   cardContainer: {
     backgroundColor: '#031622',
@@ -189,8 +325,35 @@ const styles = {
   detailWrapper: {
     marginTop: 10,
     marginBottom: 10,
+    flexDirection: 'column'
+  },
+  chartLoadingView: {
     flexDirection: 'column',
-    justifyContent: 'space-around'
+    justifyContent: 'center',
+    paddingBottom: 10
+  },
+  loadingChartText: {
+    color: '#cdd3d7',
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 15
+  },
+  selectedPriceText: {
+    color: '#cdd3d7',
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 20
+  },
+  selectedTimeText: {
+    color: '#cdd3d7',
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 16
+  },
+  chartView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingBottom: 10
   },
   cardTextView: {
     flexDirection: 'row',

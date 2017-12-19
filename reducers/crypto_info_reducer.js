@@ -1,15 +1,29 @@
 import _ from 'lodash';
-import { FETCH_CRYPTO_LIST, SELECT_CRYPTO } from '../actions/types';
+import {
+  FETCH_CRYPTO_LIST,
+  SELECT_CRYPTO,
+  FETCH_CHART_DATA,
+  CLEAR_CHART_DATA
+} from '../actions/types';
 const IMAGE_URL = 'https://files.coinmarketcap.com/static/img/coins/32x32/';
 
 export default function(
-  state = { list: null, crypto: null, error: null },
+  state = {
+    list: null,
+    selectedCrypto: null,
+    selectedChartData: null,
+    error: null
+  },
   action
 ) {
-  const { type, list, crypto, error } = action;
+  const { type, list, crypto, chartData, error } = action;
   switch (type) {
     case SELECT_CRYPTO:
       return { ...state, selectedCrypto: crypto };
+    case FETCH_CHART_DATA:
+      return { ...state, selectedChartData: chartData };
+    case CLEAR_CHART_DATA:
+      return { ...state, selectedChartData: null };
     case FETCH_CRYPTO_LIST:
       let btcItem = {};
       let ethItem = {};
@@ -35,7 +49,7 @@ export default function(
             parseFloat(item.price_usd) /
             (1 + parseFloat(item.percent_change_24h) / 100);
           const itemPriceInBtcYesterday =
-            itemPriceInUsdYesterday / parseFloat(btcPriceYesterday);
+            itemPriceInUsdYesterday / btcPriceYesterday;
           const btcPercentDiff =
             (parseFloat(item.price_btc) / itemPriceInBtcYesterday - 1) * 100;
           item.price_yesterday_usd = itemPriceInUsdYesterday;
@@ -52,7 +66,7 @@ export default function(
             parseFloat(item.price_usd) /
             (1 + parseFloat(item.percent_change_24h) / 100);
           const itemPriceInEthYesterday =
-            itemPriceInUsdYesterday / parseFloat(ethPriceYesterday);
+            itemPriceInUsdYesterday / ethPriceYesterday;
           const itemPriceInEthToday =
             parseFloat(item.price_usd) / parseFloat(ethItem.price_usd);
           const ethPercentDiff =

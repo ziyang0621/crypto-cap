@@ -192,6 +192,8 @@ class CryptoListScreen extends Component {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={this.onRefresh}
+              tintColor="white"
+              style={{ backgroundColor: '#031622' }}
             />
           }
         />
@@ -231,7 +233,7 @@ class CryptoListScreen extends Component {
       }
       const cryptoList = this.renderList(inputList);
       return (
-        <View style={{ flex: 1, paddingTop: 70, backgroundColor: '#031622' }}>
+        <View style={{ flex: 1, paddingTop: 0, backgroundColor: '#031622' }}>
           <SearchBar
             containerStyle={{ backgroundColor: '#031622' }}
             clearIcon={{ color: '#86939e', name: 'clear' }}
