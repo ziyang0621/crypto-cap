@@ -325,8 +325,7 @@ const styles = {
   detailWrapper: {
     marginTop: 10,
     marginBottom: 10,
-    flexDirection: 'column',
-    justifyContent: 'space-around'
+    flexDirection: 'column'
   },
   chartLoadingView: {
     flexDirection: 'column',
