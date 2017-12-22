@@ -19,6 +19,7 @@ import {
 } from 'react-native-elements';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import Util from '../tools/Util';
 import LineChart from '../components/LineChart';
 
 class CryptoDetailScreen extends Component {
@@ -217,24 +218,26 @@ class CryptoDetailScreen extends Component {
           {chartView}
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Market Cap:</Text>
-            <Text style={styles.cardAmountText}>${market_cap_usd}</Text>
+            <Text style={styles.cardAmountText}>
+              ${Util.numberWithCommas(market_cap_usd)}
+            </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>24 Hour Volume:</Text>
             <Text style={styles.cardAmountText}>
-              ${crypto['24h_volume_usd']}
+              ${Util.numberWithCommas(crypto['24h_volume_usd'])}
             </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Available Supply:</Text>
             <Text style={styles.cardAmountText}>
-              {available_supply} {symbol}
+              {Util.numberWithCommas(available_supply)} {symbol}
             </Text>
           </View>
           <View style={styles.cardTextView}>
             <Text style={styles.cardText}>Total Supply:</Text>
             <Text style={styles.cardAmountText}>
-              {total_supply} {symbol}
+              {Util.numberWithCommas(total_supply)} {symbol}
             </Text>
           </View>
           <Divider style={styles.divider} />
