@@ -19,8 +19,10 @@ import {
   List,
   ListItem,
   Icon,
-  SearchBar
+  SearchBar,
+  ButtonGroup
 } from 'react-native-elements';
+import Util from '../tools/Util';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -73,6 +75,7 @@ class CryptoListScreen extends Component {
   state = {
     appState: AppState.currentState,
     searchText: '',
+    selectedIndex: 0,
     refreshing: false
   };
 
@@ -130,7 +133,7 @@ class CryptoListScreen extends Component {
     };
 
     return (
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+      <View style={{ flexDirection: 'row' }}>
         <Text style={styles.priceText}>{priceText}</Text>
         <Text style={percentChangeStyle}>{percentText}</Text>
       </View>
@@ -164,10 +167,20 @@ class CryptoListScreen extends Component {
         title={
           <View style={styles.titleView}>
             <View
-              style={{ flexDirection: 'row', justifyContent: 'space-around' }}
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-around'
+              }}
             >
-              <Text style={styles.rankText}>{rowData.rank}</Text>
-              <Text style={styles.nameText}>{rowData.name}</Text>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+              >
+                <Text style={styles.rankText}>{rowData.rank}</Text>
+                <Text style={styles.nameText}>{rowData.name}</Text>
+              </View>
+              <Text style={styles.marketCapText}>
+                ${Util.numberWithCommas(rowData.market_cap_usd)}
+              </Text>
             </View>
             {infoView}
           </View>
@@ -215,10 +228,29 @@ class CryptoListScreen extends Component {
     });
   };
 
+  updateIndex = selectedIndex => {
+    const { sortOptions } = this.props.cryptoInfo;
+    if (selectedIndex === 0) {
+      this.props.updateSortOptions({
+        marketCap: sortOptions.marketCap === 'desc' ? 'asc' : 'desc',
+        percentChange: ''
+      });
+    } else if (selectedIndex === 1) {
+      this.props.updateSortOptions({
+        marketCap: '',
+        percentChange: sortOptions.percentChange === 'desc' ? 'asc' : 'desc'
+      });
+    }
+
+    this.setState({ selectedIndex });
+  };
+
   render() {
     const { cryptoInfo } = this.props;
-    const { searchText } = this.state;
+    const { searchText, selectedIndex } = this.state;
     console.log('render', this.props);
+
+    let sortOptionsView = <View />;
 
     if (cryptoInfo && cryptoInfo.list) {
       let inputList = cryptoInfo.list;
@@ -231,9 +263,75 @@ class CryptoListScreen extends Component {
           );
         });
       }
+      if (cryptoInfo.sortOptions) {
+        const { infoListIndex } = this.props.navigation.state.params;
+        let sortButtons = [];
+
+        if (cryptoInfo.sortOptions.marketCap === '') {
+          sortButtons.push('Market Cap');
+        } else if (cryptoInfo.sortOptions.marketCap === 'desc') {
+          inputList = _.sortBy(inputList, crypto => {
+            return -parseFloat(crypto.market_cap_usd);
+          });
+          sortButtons.push('Market Cap ↓');
+        } else if (cryptoInfo.sortOptions.marketCap === 'asc') {
+          inputList = _.sortBy(inputList, crypto => {
+            return parseFloat(crypto.market_cap_usd);
+          });
+          sortButtons.push('Market Cap ↑');
+        }
+
+        if (cryptoInfo.sortOptions.percentChange === '') {
+          sortButtons.push('Percent Change');
+        } else if (cryptoInfo.sortOptions.percentChange === 'desc') {
+          inputList = _.sortBy(inputList, crypto => {
+            if (infoListIndex === 0) {
+              return -parseFloat(crypto.percent_change_24h);
+            } else if (infoListIndex === 1) {
+              return -parseFloat(crypto.percent_change_24h_btc);
+            } else {
+              return -parseFloat(crypto.percent_change_24h_eth);
+            }
+          });
+          sortButtons.push('Percent Change ↓');
+        } else if (cryptoInfo.sortOptions.percentChange === 'asc') {
+          inputList = _.sortBy(inputList, crypto => {
+            if (infoListIndex === 0) {
+              return parseFloat(crypto.percent_change_24h);
+            } else if (infoListIndex === 1) {
+              return parseFloat(crypto.percent_change_24h_btc);
+            } else {
+              return parseFloat(crypto.percent_change_24h_eth);
+            }
+          });
+          sortButtons.push('Percent Change ↑');
+        }
+
+        sortOptionsView = (
+          <ButtonGroup
+            onPress={this.updateIndex}
+            selectedIndex={selectedIndex}
+            buttons={sortButtons}
+            containerStyle={{
+              height: 30,
+              backgroundColor: '#031622'
+            }}
+            textStyle={{ color: '#52a0ff' }}
+            selectedTextStyle={{ color: '#cdd3d7' }}
+            selectedBackgroundColor={'#67737a'}
+          />
+        );
+      }
       const cryptoList = this.renderList(inputList);
       return (
-        <View style={{ flex: 1, paddingTop: 0, backgroundColor: '#031622' }}>
+        <View
+          style={{
+            flex: 1,
+            paddingBottom: Platform.OS === 'android' ? 100 : 90,
+            backgroundColor: '#031622',
+            flexDirection: 'column'
+          }}
+        >
           <SearchBar
             containerStyle={{ backgroundColor: '#031622' }}
             clearIcon={{ color: '#86939e', name: 'clear' }}
@@ -243,6 +341,7 @@ class CryptoListScreen extends Component {
             placeholder="Search"
           />
           {cryptoList}
+          {sortOptionsView}
         </View>
       );
     }
@@ -265,7 +364,8 @@ const styles = {
   },
   listView: {
     backgroundColor: '#031622',
-    paddingBottom: 70
+    paddingBottom: 70,
+    marginBottom: 100
   },
   listItemContainerView: {
     paddingTop: 15,
@@ -284,7 +384,8 @@ const styles = {
     justifyContent: 'space-between',
     paddingLeft: 5,
     paddingRight: 5,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    alignItems: 'center'
   },
   rankText: {
     paddingLeft: 5,
@@ -300,6 +401,14 @@ const styles = {
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
     fontSize: 16
+  },
+  marketCapText: {
+    paddingLeft: 5,
+    marginTop: 5,
+    color: '#66696b',
+    fontFamily:
+      Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
+    fontSize: 14
   },
   priceText: {
     paddingLeft: 5,

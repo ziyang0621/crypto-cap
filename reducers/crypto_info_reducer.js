@@ -3,7 +3,8 @@ import {
   FETCH_CRYPTO_LIST,
   SELECT_CRYPTO,
   FETCH_CHART_DATA,
-  CLEAR_CHART_DATA
+  CLEAR_CHART_DATA,
+  UPDATE_SORT_OPTIONS
 } from '../actions/types';
 const IMAGE_URL = 'https://files.coinmarketcap.com/static/img/coins/32x32/';
 
@@ -12,11 +13,12 @@ export default function(
     list: null,
     selectedCrypto: null,
     selectedChartData: null,
+    sortOptions: { marketCap: 'desc', percentChange: '' },
     error: null
   },
   action
 ) {
-  const { type, list, crypto, chartData, error } = action;
+  const { type, list, crypto, chartData, sortOptions, error } = action;
   switch (type) {
     case SELECT_CRYPTO:
       return { ...state, selectedCrypto: crypto };
@@ -24,6 +26,8 @@ export default function(
       return { ...state, selectedChartData: chartData };
     case CLEAR_CHART_DATA:
       return { ...state, selectedChartData: null };
+    case UPDATE_SORT_OPTIONS:
+      return { ...state, sortOptions: sortOptions };
     case FETCH_CRYPTO_LIST:
       let btcItem = {};
       let ethItem = {};

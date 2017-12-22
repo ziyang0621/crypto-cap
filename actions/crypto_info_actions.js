@@ -3,7 +3,8 @@ import {
   FETCH_CRYPTO_LIST,
   SELECT_CRYPTO,
   FETCH_CHART_DATA,
-  CLEAR_CHART_DATA
+  CLEAR_CHART_DATA,
+  UPDATE_SORT_OPTIONS
 } from './types';
 
 const COINS_URL = 'https://api.coinmarketcap.com/v1/ticker';
@@ -15,6 +16,10 @@ export const selectCrypto = crypto => {
 
 export const clearChartData = () => {
   return { type: CLEAR_CHART_DATA };
+};
+
+export const updateSortOptions = sortOptions => {
+  return { type: UPDATE_SORT_OPTIONS, sortOptions: sortOptions };
 };
 
 export const fetchChartData = (
