@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Constants } from 'expo';
+import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
   ScrollView,
@@ -8,19 +8,17 @@ import {
   Text,
   ActivityIndicator,
   RefreshControl,
-  ListView,
   Platform,
-  AppState
+  AppState,
+  FlatList,
 } from 'react-native';
 import {
-  Header,
   Avatar,
   Button,
-  List,
-  ListItem,
   Icon,
   SearchBar,
-  ButtonGroup
+  ButtonGroup,
+  ListItem,
 } from 'react-native-elements';
 import Util from '../tools/Util';
 import { connect } from 'react-redux';
@@ -29,74 +27,84 @@ import * as actions from '../actions';
 const infoList = ['price_usd', 'price_btc', 'price_eth'];
 
 class CryptoListScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    header: ({ navigate }) => {
-      const { state, setParams } = navigation;
-      let headerTitleText = 'Price (USD)';
-      if (state.params) {
-        const { infoListIndex } = state.params;
-        if (infoList[infoListIndex] === 'price_usd') {
-          headerTitleText = 'Price (USD)';
-        } else if (infoList[infoListIndex] === 'price_btc') {
-          headerTitleText = 'Price (BTC)';
-        } else if (infoList[infoListIndex] === 'price_eth') {
-          headerTitleText = 'Price (ETH)';
-        }
-      }
-      return (
-        <Header
-          centerComponent={
-            <Text style={styles.headerTitleTextView}>{headerTitleText}</Text>
-          }
-          rightComponent={
-            <Icon
-              name="exchange"
-              type="font-awesome"
-              color="#cdd3d7"
-              size={25}
-              onPress={() => {
-                if (state.params) {
-                  const { infoListIndex } = state.params;
-                  if (infoListIndex === infoList.length - 1) {
-                    setParams({ infoListIndex: 0 });
-                  } else {
-                    setParams({ infoListIndex: infoListIndex + 1 });
-                  }
-                }
-              }}
-            />
-          }
-          backgroundColor="#031622"
-        />
-      );
-    }
-  });
-
-  state = {
-    appState: AppState.currentState,
-    searchText: '',
-    selectedIndex: 0,
-    refreshing: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      appState: AppState.currentState,
+      searchText: '',
+      selectedIndex: 0,
+      refreshing: false,
+      infoListIndex: 0,
+    };
+  }
 
   componentDidMount() {
-    this.props.navigation.setParams({ infoListIndex: 0 });
+    this.props.navigation.setOptions({
+      headerTitle: this.getHeaderTitle(),
+      headerRight: () => (
+        <Icon
+          name="exchange"
+          type="font-awesome"
+          color="#cdd3d7"
+          size={25}
+          onPress={this.toggleInfoType}
+          containerStyle={{ marginRight: 15 }}
+        />
+      ),
+      headerStyle: {
+        backgroundColor: '#031622',
+      },
+      headerTintColor: '#fff',
+    });
+
     AppState.addEventListener('change', this._handleAppStateChange);
-    this.props.fetchCryptoList('USD', 100, list => {
+    this.props.fetchCryptoList('USD', 100, (list) => {
       console.log('the list', list);
     });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.infoListIndex !== this.state.infoListIndex) {
+      this.props.navigation.setOptions({
+        headerTitle: this.getHeaderTitle(),
+      });
+    }
   }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  _handleAppStateChange = nextAppState => {
+  getHeaderTitle = () => {
+    const { infoListIndex } = this.state;
+    let headerTitleText = 'Price (USD)';
+
+    if (infoList[infoListIndex] === 'price_usd') {
+      headerTitleText = 'Price (USD)';
+    } else if (infoList[infoListIndex] === 'price_btc') {
+      headerTitleText = 'Price (BTC)';
+    } else if (infoList[infoListIndex] === 'price_eth') {
+      headerTitleText = 'Price (ETH)';
+    }
+
+    return headerTitleText;
+  };
+
+  toggleInfoType = () => {
+    const { infoListIndex } = this.state;
+    if (infoListIndex === infoList.length - 1) {
+      this.setState({ infoListIndex: 0 });
+    } else {
+      this.setState({ infoListIndex: infoListIndex + 1 });
+    }
+  };
+
+  _handleAppStateChange = (nextAppState) => {
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      this.props.fetchCryptoList('USD', 100, list => {
+      this.props.fetchCryptoList('USD', 100, (list) => {
         console.log('the list', list);
       });
     }
@@ -129,7 +137,7 @@ class CryptoListScreen extends Component {
       color: percentColor,
       fontFamily:
         Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-      fontSize: 16
+      fontSize: 16,
     };
 
     return (
@@ -140,105 +148,97 @@ class CryptoListScreen extends Component {
     );
   };
 
-  renderRow = (rowData, sectionId) => {
-    const { infoListIndex } = this.props.navigation.state.params;
-
-    const infoView = this.renderRowInfo(rowData, infoList[infoListIndex]);
+  renderItem = ({ item, index }) => {
+    const { infoListIndex } = this.state;
+    const infoView = this.renderRowInfo(item, infoList[infoListIndex]);
 
     return (
       <ListItem
         onPress={() => {
-          this.props.selectCrypto(rowData);
+          this.props.selectCrypto(item);
           this.props.navigation.navigate('CryptoDetail', {
-            name: rowData.name
+            name: item.name,
           });
         }}
         containerStyle={styles.listItemContainerView}
-        hideChevron={true}
-        key={sectionId}
-        avatar={
-          <Avatar
-            containerStyle={styles.avatarContainerView}
-            small
-            rounded
-            source={{ uri: rowData.image_url }}
-          />
-        }
-        title={
+        key={index}
+      >
+        <Avatar
+          containerStyle={styles.avatarContainerView}
+          size="small"
+          rounded
+          source={{ uri: item.image_url }}
+        />
+        <ListItem.Content>
           <View style={styles.titleView}>
             <View
               style={{
                 flexDirection: 'column',
-                justifyContent: 'space-around'
+                justifyContent: 'space-around',
               }}
             >
               <View
                 style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
               >
-                <Text style={styles.rankText}>{rowData.rank}</Text>
-                <Text style={styles.nameText}>{rowData.name}</Text>
+                <Text style={styles.rankText}>{item.rank}</Text>
+                <Text style={styles.nameText}>{item.name}</Text>
               </View>
               <Text style={styles.marketCapText}>
-                ${Util.numberWithCommas(rowData.market_cap_usd)}
+                ${Util.numberWithCommas(item.market_cap_usd)}
               </Text>
             </View>
             {infoView}
           </View>
-        }
-      />
+        </ListItem.Content>
+      </ListItem>
     );
   };
 
   renderList(cryptoInfoList) {
     const { refreshing } = this.state;
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
-    const dataSource = ds.cloneWithRows(cryptoInfoList);
+
     return (
-      <List style={styles.listView}>
-        <ListView
-          enableEmptySections={true}
-          renderRow={this.renderRow}
-          dataSource={dataSource}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={this.onRefresh}
-              tintColor="white"
-              style={{ backgroundColor: '#031622' }}
-            />
-          }
-        />
-      </List>
+      <FlatList
+        data={cryptoInfoList}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={this.onRefresh}
+            tintColor="white"
+            style={{ backgroundColor: '#031622' }}
+          />
+        }
+      />
     );
   }
 
   onRefresh = () => {
     this.setState({ refreshing: true });
-    this.props.fetchCryptoList('USD', 100, list => {
+    this.props.fetchCryptoList('USD', 100, (list) => {
       console.log('finished fetching list');
       this.setState({ refreshing: false });
     });
   };
 
-  searchTextChange = searchText => {
+  searchTextChange = (searchText) => {
     this.setState({
-      searchText: searchText
+      searchText: searchText,
     });
   };
 
-  updateIndex = selectedIndex => {
+  updateIndex = (selectedIndex) => {
     const { sortOptions } = this.props.cryptoInfo;
     if (selectedIndex === 0) {
       this.props.updateSortOptions({
         marketCap: sortOptions.marketCap === 'desc' ? 'asc' : 'desc',
-        percentChange: ''
+        percentChange: '',
       });
     } else if (selectedIndex === 1) {
       this.props.updateSortOptions({
         marketCap: '',
-        percentChange: sortOptions.percentChange === 'desc' ? 'asc' : 'desc'
+        percentChange: sortOptions.percentChange === 'desc' ? 'asc' : 'desc',
       });
     }
 
@@ -255,7 +255,7 @@ class CryptoListScreen extends Component {
     if (cryptoInfo && cryptoInfo.list) {
       let inputList = cryptoInfo.list;
       if (searchText) {
-        inputList = _.filter(inputList, item => {
+        inputList = _.filter(inputList, (item) => {
           return (
             item.symbol.toLowerCase().indexOf(searchText.toLowerCase()) !==
               -1 ||
@@ -264,18 +264,17 @@ class CryptoListScreen extends Component {
         });
       }
       if (cryptoInfo.sortOptions) {
-        const { infoListIndex } = this.props.navigation.state.params;
         let sortButtons = [];
 
         if (cryptoInfo.sortOptions.marketCap === '') {
           sortButtons.push('Market Cap');
         } else if (cryptoInfo.sortOptions.marketCap === 'desc') {
-          inputList = _.sortBy(inputList, crypto => {
+          inputList = _.sortBy(inputList, (crypto) => {
             return -parseFloat(crypto.market_cap_usd);
           });
           sortButtons.push('Market Cap ↓');
         } else if (cryptoInfo.sortOptions.marketCap === 'asc') {
-          inputList = _.sortBy(inputList, crypto => {
+          inputList = _.sortBy(inputList, (crypto) => {
             return parseFloat(crypto.market_cap_usd);
           });
           sortButtons.push('Market Cap ↑');
@@ -284,25 +283,13 @@ class CryptoListScreen extends Component {
         if (cryptoInfo.sortOptions.percentChange === '') {
           sortButtons.push('Percent Change');
         } else if (cryptoInfo.sortOptions.percentChange === 'desc') {
-          inputList = _.sortBy(inputList, crypto => {
-            if (infoListIndex === 0) {
-              return -parseFloat(crypto.percent_change_24h);
-            } else if (infoListIndex === 1) {
-              return -parseFloat(crypto.percent_change_24h_btc);
-            } else {
-              return -parseFloat(crypto.percent_change_24h_eth);
-            }
+          inputList = _.sortBy(inputList, (crypto) => {
+            return -parseFloat(crypto.percent_change_24h);
           });
           sortButtons.push('Percent Change ↓');
         } else if (cryptoInfo.sortOptions.percentChange === 'asc') {
-          inputList = _.sortBy(inputList, crypto => {
-            if (infoListIndex === 0) {
-              return parseFloat(crypto.percent_change_24h);
-            } else if (infoListIndex === 1) {
-              return parseFloat(crypto.percent_change_24h_btc);
-            } else {
-              return parseFloat(crypto.percent_change_24h_eth);
-            }
+          inputList = _.sortBy(inputList, (crypto) => {
+            return parseFloat(crypto.percent_change_24h);
           });
           sortButtons.push('Percent Change ↑');
         }
@@ -314,7 +301,7 @@ class CryptoListScreen extends Component {
             buttons={sortButtons}
             containerStyle={{
               height: 30,
-              backgroundColor: '#031622'
+              backgroundColor: '#031622',
             }}
             textStyle={{ color: '#52a0ff' }}
             selectedTextStyle={{ color: '#cdd3d7' }}
@@ -329,7 +316,7 @@ class CryptoListScreen extends Component {
             flex: 1,
             paddingBottom: Platform.OS === 'android' ? 100 : 90,
             backgroundColor: '#031622',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
           <SearchBar
@@ -354,18 +341,18 @@ const styles = {
     flex: 1,
     backgroundColor: '#031622',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitleTextView: {
     color: '#cdd3d7',
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif' : 'HelveticaNeue-Light',
-    fontSize: 20
+    fontSize: 20,
   },
   listView: {
     backgroundColor: '#031622',
     paddingBottom: 70,
-    marginBottom: 100
+    marginBottom: 100,
   },
   listItemContainerView: {
     paddingTop: 15,
@@ -373,11 +360,11 @@ const styles = {
     backgroundColor: '#031622',
     borderTopWidth: 0,
     borderBottomWidth: 1,
-    borderBottomColor: '#787c7f'
+    borderBottomColor: '#787c7f',
   },
   avatarContainerView: {
     borderWidth: 0.2,
-    borderColor: '#909499'
+    borderColor: '#909499',
   },
   titleView: {
     flexDirection: 'row',
@@ -385,7 +372,7 @@ const styles = {
     paddingLeft: 5,
     paddingRight: 5,
     flexWrap: 'wrap',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rankText: {
     paddingLeft: 5,
@@ -393,14 +380,14 @@ const styles = {
     color: '#cdd3d7',
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16
+    fontSize: 16,
   },
   nameText: {
     paddingLeft: 5,
     color: '#cdd3d7',
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16
+    fontSize: 16,
   },
   marketCapText: {
     paddingLeft: 5,
@@ -408,19 +395,19 @@ const styles = {
     color: '#66696b',
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 14
+    fontSize: 14,
   },
   priceText: {
     paddingLeft: 5,
     color: '#52a0ff',
     fontFamily:
       Platform.OS === 'android' ? 'sans-serif-light' : 'HelveticaNeue-Light',
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 };
 
 function mapStateToProps({ cryptoInfo }) {
-  return { cryptoInfo: cryptoInfo };
+  return { cryptoInfo };
 }
 
 export default connect(mapStateToProps, actions)(CryptoListScreen);

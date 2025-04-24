@@ -4,27 +4,31 @@
     "description": "a cryptocurrency price tracking app",
     "slug": "crypto-cap",
     "privacy": "public",
-    "sdkVersion": "24.0.0",
     "version": "1.1.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "./assets/icons/app-icon.png",
-    "loading": {
-      "icon": "./assets/icons/loading-icon.png",
+    "splash": {
+      "image": "./assets/icons/loading-icon.png",
       "backgroundColor": "#045076",
-      "hideExponentText": true
+      "resizeMode": "contain"
     },
-    "packagerOpts": {
-      "assetExts": ["ttf", "mp4"]
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.ziyang0621.cryptocap",
       "supportsTablet": true,
-      "buildNumber": "8"
+      "buildNumber": "9"
     },
     "android": {
       "package": "com.ziyang00621.cryptocap",
-      "versionCode": 8
+      "versionCode": 9,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/app-icon.png",
+        "backgroundColor": "#045076"
+      }
     },
     "androidStatusBar": {
       "backgroundColor": "#031622"
