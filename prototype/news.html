@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - News</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <style>
+      .news-category {
+        padding: 0 20px;
+        margin-bottom: 10px;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        display: flex;
+        gap: 12px;
+      }
+
+      .news-tag {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: var(--card-bg);
+        border-radius: 20px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .news-tag.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .news-item {
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 0;
+        cursor: pointer;
+      }
+
+      .news-item:last-child {
+        border-bottom: none;
+      }
+
+      .news-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-right: 16px;
+        flex-shrink: 0;
+      }
+
+      .news-content {
+        flex: 1;
+      }
+
+      .news-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 6px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .news-meta {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      }
+
+      .news-source {
+        font-weight: 500;
+        margin-right: 8px;
+      }
+
+      .news-time {
+        color: var(--text-light);
+      }
+
+      .news-snippet {
+        font-size: 14px;
+        color: var(--text-secondary);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .news-dot {
+        margin: 0 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>9:41</span>
+      </div>
+      <div class="status-right">
+        <span class="status-icon"><i class="fas fa-signal"></i></span>
+        <span class="status-icon"><i class="fas fa-wifi"></i></span>
+        <span class="status-icon"><i class="fas fa-battery-full"></i></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="flex flex-between items-center">
+        <h1 class="page-header">Crypto News</h1>
+
+        <!-- Notifications -->
+        <div>
+          <i
+            class="fas fa-bell"
+            style="font-size: 20px; color: var(--text-secondary)"
+          ></i>
+        </div>
+      </div>
+
+      <!-- News Categories -->
+      <div class="news-category">
+        <div class="news-tag active">All</div>
+        <div class="news-tag">Bitcoin</div>
+        <div class="news-tag">Ethereum</div>
+        <div class="news-tag">Regulation</div>
+        <div class="news-tag">NFTs</div>
+        <div class="news-tag">DeFi</div>
+        <div class="news-tag">Web3</div>
+      </div>
+
+      <!-- News Feed -->
+      <div class="card">
+        <!-- Featured News -->
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            alt="Bitcoin News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              Bitcoin Surges Past $50K as Institutional Adoption Grows
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">CoinDesk</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">2 hours ago</span>
+            </div>
+            <p class="news-snippet">
+              Bitcoin has broken through the key psychological level of $50,000
+              for the first time since December, fueled by growing institutional
+              adoption and renewed market confidence.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1622630998477-20aa696ecb05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
+            alt="Ethereum News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              Ethereum Completes Major Network Upgrade, Gas Fees Drop 90%
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">The Block</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">5 hours ago</span>
+            </div>
+            <p class="news-snippet">
+              Ethereum has successfully completed its latest network upgrade,
+              resulting in a significant reduction in transaction fees and
+              improved network throughput.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1551135049-8a33b5883817?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            alt="Regulation News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              SEC Approves First Spot Bitcoin ETF, Markets React Positively
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">Bloomberg</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">1 day ago</span>
+            </div>
+            <p class="news-snippet">
+              The U.S. Securities and Exchange Commission has approved the first
+              spot Bitcoin ETF, marking a watershed moment for cryptocurrency
+              adoption in traditional finance.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
+            alt="Solana News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              Solana Ecosystem Continues to Grow Despite Recent Network Issues
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">Decrypt</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">1 day ago</span>
+            </div>
+            <p class="news-snippet">
+              Despite facing several network outages in recent months, Solana's
+              ecosystem continues to expand with new projects and increasing
+              developer activity.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
+            alt="NFT News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              Major Brand Launches NFT Collection with Utility Focus
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">NFT Now</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">2 days ago</span>
+            </div>
+            <p class="news-snippet">
+              A global brand has launched a new NFT collection that focuses on
+              real-world utility, offering holders exclusive access to products
+              and events.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <img
+            src="https://images.unsplash.com/photo-1620321023374-d1a68fbc720d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
+            alt="DeFi News"
+            class="news-image"
+          />
+          <div class="news-content">
+            <h3 class="news-title">
+              DeFi Protocol Reaches $10B in Total Value Locked
+            </h3>
+            <div class="news-meta">
+              <span class="news-source">DeFi Pulse</span>
+              <span class="news-dot">•</span>
+              <span class="news-time">3 days ago</span>
+            </div>
+            <p class="news-snippet">
+              A leading decentralized finance protocol has surpassed $10 billion
+              in total value locked, highlighting the continued growth of the
+              DeFi sector despite market volatility.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navigation-bar">
+      <a href="home.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-home"></i></div>
+        <div>Home</div>
+      </a>
+      <a href="search.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-search"></i></div>
+        <div>Search</div>
+      </a>
+      <a href="watchlist.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-star"></i></div>
+        <div>Watchlist</div>
+      </a>
+      <a href="news.html" class="nav-item active">
+        <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+        <div>News</div>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-user"></i></div>
+        <div>Profile</div>
+      </a>
+    </div>
+
+    <script>
+      // Make news items clickable
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.news-item').forEach((item) => {
+          item.addEventListener('click', function () {
+            // In a real app, this would navigate to the news detail page
+            alert('News article would open here');
+          });
+        });
+
+        // Make category tags clickable
+        document.querySelectorAll('.news-tag').forEach((tag) => {
+          tag.addEventListener('click', function () {
+            // Remove active class from all tags
+            document.querySelectorAll('.news-tag').forEach((t) => {
+              t.classList.remove('active');
+            });
+
+            // Add active class to clicked tag
+            this.classList.add('active');
+
+            // In a real app, this would filter news by category
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

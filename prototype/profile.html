@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - Profile</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <style>
+      .profile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+        margin-bottom: 16px;
+      }
+
+      .profile-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+      }
+
+      .profile-username {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+      }
+
+      .profile-stats {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .profile-buttons {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .profile-button {
+        flex: 1;
+        padding: 10px 0;
+        border-radius: 12px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .primary-button {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .secondary-button {
+        background-color: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      .profile-section {
+        margin-bottom: 24px;
+      }
+
+      .section-header {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+      }
+
+      .settings-list {
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .settings-item {
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+      }
+
+      .settings-item:last-child {
+        border-bottom: none;
+      }
+
+      .settings-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background-color: rgba(var(--primary-rgb), 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+
+      .settings-text {
+        flex: 1;
+      }
+
+      .settings-title {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+      }
+
+      .settings-description {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .danger-zone {
+        color: var(--danger-color);
+      }
+
+      .alert-icon {
+        color: var(--danger-color);
+        background-color: rgba(220, 38, 38, 0.1);
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: '';
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary-color);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>9:41</span>
+      </div>
+      <div class="status-right">
+        <span class="status-icon"><i class="fas fa-signal"></i></span>
+        <span class="status-icon"><i class="fas fa-wifi"></i></span>
+        <span class="status-icon"><i class="fas fa-battery-full"></i></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="flex flex-between items-center">
+        <h1 class="page-header">Profile</h1>
+        <div>
+          <i
+            class="fas fa-cog"
+            style="font-size: 20px; color: var(--text-secondary)"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <img
+          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+          alt="Profile Picture"
+          class="profile-avatar"
+        />
+        <h2 class="profile-name">Alex Johnson</h2>
+        <div class="profile-username">@alexjohnson</div>
+
+        <!-- Profile Stats -->
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">$12,450</div>
+            <div class="stat-label">Portfolio</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Assets</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Years</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Actions -->
+      <div class="profile-buttons">
+        <div class="profile-button primary-button">Edit Profile</div>
+        <div class="profile-button secondary-button">Share</div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="profile-section">
+        <h3 class="section-header">Account Settings</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Personal Information</div>
+              <div class="settings-description">Name, email, phone</div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Security</div>
+              <div class="settings-description">Password, 2FA, face ID</div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Payment Methods</div>
+              <div class="settings-description">
+                Credit cards, bank accounts
+              </div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Notifications</div>
+              <div class="settings-description">Price alerts, news</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div class="profile-section">
+        <h3 class="section-header">Preferences</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-moon"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Dark Mode</div>
+              <div class="settings-description">
+                Switch between light and dark themes
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Language</div>
+              <div class="settings-description">English (US)</div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Currency</div>
+              <div class="settings-description">USD - US Dollar</div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support & About -->
+      <div class="profile-section">
+        <h3 class="section-header">Help & Support</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Support Center</div>
+              <div class="settings-description">Help with your account</div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon">
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">About</div>
+              <div class="settings-description">
+                App version, terms, privacy
+              </div>
+            </div>
+            <i
+              class="fas fa-chevron-right"
+              style="color: var(--text-light)"
+            ></i>
+          </div>
+          <div class="settings-item">
+            <div class="settings-icon alert-icon">
+              <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title danger-zone">Log Out</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navigation-bar">
+      <a href="home.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-home"></i></div>
+        <div>Home</div>
+      </a>
+      <a href="search.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-search"></i></div>
+        <div>Search</div>
+      </a>
+      <a href="watchlist.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-star"></i></div>
+        <div>Watchlist</div>
+      </a>
+      <a href="news.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+        <div>News</div>
+      </a>
+      <a href="profile.html" class="nav-item active">
+        <div class="nav-icon"><i class="fas fa-user"></i></div>
+        <div>Profile</div>
+      </a>
+    </div>
+
+    <script>
+      // Simulate toggle functionality
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.switch input').forEach((input) => {
+          input.addEventListener('change', function () {
+            // In a real app, this would save the user's preferences
+            console.log('Toggle changed:', this.checked);
+          });
+        });
+
+        // Make settings items clickable
+        document.querySelectorAll('.settings-item').forEach((item) => {
+          item.addEventListener('click', function (e) {
+            // Don't trigger when clicking on the switch
+            if (e.target.closest('.switch')) return;
+
+            // In a real app, this would navigate to the respective page
+            const title = this.querySelector('.settings-title').textContent;
+            if (title === 'Log Out') {
+              if (confirm('Are you sure you want to log out?')) {
+                console.log('User logged out');
+              }
+            } else {
+              console.log('Clicked on:', title);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

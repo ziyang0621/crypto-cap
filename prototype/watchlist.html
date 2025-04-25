@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - Watchlist</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <style>
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        opacity: 0.7;
+      }
+
+      .empty-state-icon {
+        font-size: 48px;
+        color: var(--text-light);
+        margin-bottom: 16px;
+      }
+
+      .empty-state-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+      }
+
+      .empty-state-message {
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+      }
+
+      .add-button {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-size: 24px;
+      }
+
+      .portfolio-value {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+
+      .portfolio-amount {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 8px 0;
+      }
+
+      .portfolio-change {
+        display: inline-block;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>9:41</span>
+      </div>
+      <div class="status-right">
+        <span class="status-icon"><i class="fas fa-signal"></i></span>
+        <span class="status-icon"><i class="fas fa-wifi"></i></span>
+        <span class="status-icon"><i class="fas fa-battery-full"></i></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="flex flex-between items-center">
+        <h1 class="page-header">Watchlist</h1>
+
+        <!-- Sort & Filter Options -->
+        <div>
+          <i
+            class="fas fa-sliders-h"
+            style="font-size: 20px; color: var(--text-secondary)"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Portfolio Summary Card -->
+      <div class="portfolio-value">
+        <div style="color: rgba(255, 255, 255, 0.8)">Total Portfolio Value</div>
+        <div class="portfolio-amount">$12,458.92</div>
+        <div class="portfolio-change">
+          <i class="fas fa-arrow-up"></i> +8.2% ($943.28)
+        </div>
+      </div>
+
+      <!-- Watchlist Tabs -->
+      <div class="tab-container">
+        <div class="tab active" onclick="changeTab(this, 'all')">
+          All Assets
+        </div>
+        <div class="tab" onclick="changeTab(this, 'gainers')">Gainers</div>
+        <div class="tab" onclick="changeTab(this, 'losers')">Losers</div>
+      </div>
+
+      <!-- Watchlist Content -->
+      <div id="all" class="tab-content">
+        <div class="card">
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+                alt="Bitcoin"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Bitcoin</span>
+                <span class="currency-symbol">BTC</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$51,342.89</span>
+              <span class="price-change-percent price-up"
+                >+2.34% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+                alt="Ethereum"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Ethereum</span>
+                <span class="currency-symbol">ETH</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$2,982.11</span>
+              <span class="price-change-percent price-up"
+                >+4.67% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/solana-sol-logo.png"
+                alt="Solana"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Solana</span>
+                <span class="currency-symbol">SOL</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$128.45</span>
+              <span class="price-change-percent price-up"
+                >+9.21% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/cardano-ada-logo.png"
+                alt="Cardano"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Cardano</span>
+                <span class="currency-symbol">ADA</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$0.42</span>
+              <span class="price-change-percent price-down"
+                >-1.05% <i class="fas fa-arrow-down"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/chainlink-link-logo.png"
+                alt="Chainlink"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Chainlink</span>
+                <span class="currency-symbol">LINK</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$13.31</span>
+              <span class="price-change-percent price-down"
+                >-2.45% <i class="fas fa-arrow-down"></i
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gainers Tab Content (initially hidden) -->
+      <div id="gainers" class="tab-content" style="display: none">
+        <div class="card">
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/solana-sol-logo.png"
+                alt="Solana"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Solana</span>
+                <span class="currency-symbol">SOL</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$128.45</span>
+              <span class="price-change-percent price-up"
+                >+9.21% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+                alt="Ethereum"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Ethereum</span>
+                <span class="currency-symbol">ETH</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$2,982.11</span>
+              <span class="price-change-percent price-up"
+                >+4.67% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+                alt="Bitcoin"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Bitcoin</span>
+                <span class="currency-symbol">BTC</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$51,342.89</span>
+              <span class="price-change-percent price-up"
+                >+2.34% <i class="fas fa-arrow-up"></i
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Losers Tab Content (initially hidden) -->
+      <div id="losers" class="tab-content" style="display: none">
+        <div class="card">
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/chainlink-link-logo.png"
+                alt="Chainlink"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Chainlink</span>
+                <span class="currency-symbol">LINK</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$13.31</span>
+              <span class="price-change-percent price-down"
+                >-2.45% <i class="fas fa-arrow-down"></i
+              ></span>
+            </div>
+          </div>
+
+          <div class="currency-row">
+            <div class="currency-info">
+              <img
+                src="https://cryptologos.cc/logos/cardano-ada-logo.png"
+                alt="Cardano"
+                class="currency-logo"
+              />
+              <div class="currency-name-wrapper">
+                <span class="currency-name">Cardano</span>
+                <span class="currency-symbol">ADA</span>
+              </div>
+            </div>
+            <div class="currency-price-wrapper">
+              <span class="currency-price">$0.42</span>
+              <span class="price-change-percent price-down"
+                >-1.05% <i class="fas fa-arrow-down"></i
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Button -->
+      <a href="search.html" class="add-button">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navigation-bar">
+      <a href="home.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-home"></i></div>
+        <div>Home</div>
+      </a>
+      <a href="search.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-search"></i></div>
+        <div>Search</div>
+      </a>
+      <a href="watchlist.html" class="nav-item active">
+        <div class="nav-icon"><i class="fas fa-star"></i></div>
+        <div>Watchlist</div>
+      </a>
+      <a href="news.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+        <div>News</div>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-user"></i></div>
+        <div>Profile</div>
+      </a>
+    </div>
+
+    <script>
+      // JavaScript for tab functionality
+      function changeTab(tab, tabName) {
+        // Hide all tab content
+        document.querySelectorAll('.tab-content').forEach((content) => {
+          content.style.display = 'none';
+        });
+
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab').forEach((t) => {
+          t.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabName).style.display = 'block';
+
+        // Add active class to selected tab
+        tab.classList.add('active');
+      }
+
+      // Make currency rows clickable to go to detail page
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.currency-row').forEach((row) => {
+          row.addEventListener('click', function () {
+            window.location.href = 'detail.html';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

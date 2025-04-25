@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>9:41</span>
+      </div>
+      <div class="status-right">
+        <span class="status-icon"><i class="fas fa-signal"></i></span>
+        <span class="status-icon"><i class="fas fa-wifi"></i></span>
+        <span class="status-icon"><i class="fas fa-battery-full"></i></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Header with welcome message and profile icon -->
+      <div class="flex flex-between items-center mb-20">
+        <div>
+          <h1 class="page-header">Market</h1>
+          <p>Welcome back, Alex!</p>
+        </div>
+        <a href="profile.html">
+          <img
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            alt="Profile"
+            style="width: 40px; height: 40px; border-radius: 50%"
+          />
+        </a>
+      </div>
+
+      <!-- Market Overview Card -->
+      <div class="card">
+        <div class="flex flex-between items-center">
+          <h2 class="sub-header">Market Overview</h2>
+          <span style="color: var(--text-light)">24h</span>
+        </div>
+
+        <!-- Chart for market cap -->
+        <div class="chart-container">
+          <canvas id="marketChart"></canvas>
+        </div>
+
+        <div class="grid-cols-2">
+          <div class="card" style="margin-bottom: 0; background-color: #f1f5f9">
+            <div style="color: var(--text-light); font-size: 14px">
+              Market Cap
+            </div>
+            <div style="font-weight: 700; font-size: 18px">$1.24T</div>
+            <div class="price-up" style="font-size: 14px">
+              +2.4% <i class="fas fa-arrow-up"></i>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom: 0; background-color: #f1f5f9">
+            <div style="color: var(--text-light); font-size: 14px">
+              24h Volume
+            </div>
+            <div style="font-weight: 700; font-size: 18px">$58.6B</div>
+            <div class="price-up" style="font-size: 14px">
+              +5.1% <i class="fas fa-arrow-up"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending Coins Section -->
+      <div class="flex flex-between items-center" style="margin: 20px 0 15px">
+        <h2 class="sub-header" style="margin-bottom: 0">Trending Coins</h2>
+        <a
+          href="search.html"
+          style="color: var(--primary-color); font-weight: 600; font-size: 14px"
+          >See All</a
+        >
+      </div>
+
+      <!-- Trending Coins List -->
+      <div class="card">
+        <div class="currency-row">
+          <div class="currency-info">
+            <img
+              src="https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+              alt="Bitcoin"
+              class="currency-logo"
+            />
+            <div class="currency-name-wrapper">
+              <span class="currency-name">Bitcoin</span>
+              <span class="currency-symbol">BTC</span>
+            </div>
+          </div>
+          <div class="currency-price-wrapper">
+            <span class="currency-price">$51,342.89</span>
+            <span class="price-change-percent price-up"
+              >+2.34% <i class="fas fa-arrow-up"></i
+            ></span>
+          </div>
+        </div>
+
+        <div class="currency-row">
+          <div class="currency-info">
+            <img
+              src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+              alt="Ethereum"
+              class="currency-logo"
+            />
+            <div class="currency-name-wrapper">
+              <span class="currency-name">Ethereum</span>
+              <span class="currency-symbol">ETH</span>
+            </div>
+          </div>
+          <div class="currency-price-wrapper">
+            <span class="currency-price">$2,982.11</span>
+            <span class="price-change-percent price-up"
+              >+4.67% <i class="fas fa-arrow-up"></i
+            ></span>
+          </div>
+        </div>
+
+        <div class="currency-row">
+          <div class="currency-info">
+            <img
+              src="https://cryptologos.cc/logos/solana-sol-logo.png"
+              alt="Solana"
+              class="currency-logo"
+            />
+            <div class="currency-name-wrapper">
+              <span class="currency-name">Solana</span>
+              <span class="currency-symbol">SOL</span>
+            </div>
+          </div>
+          <div class="currency-price-wrapper">
+            <span class="currency-price">$128.45</span>
+            <span class="price-change-percent price-up"
+              >+9.21% <i class="fas fa-arrow-up"></i
+            ></span>
+          </div>
+        </div>
+
+        <div class="currency-row">
+          <div class="currency-info">
+            <img
+              src="https://cryptologos.cc/logos/cardano-ada-logo.png"
+              alt="Cardano"
+              class="currency-logo"
+            />
+            <div class="currency-name-wrapper">
+              <span class="currency-name">Cardano</span>
+              <span class="currency-symbol">ADA</span>
+            </div>
+          </div>
+          <div class="currency-price-wrapper">
+            <span class="currency-price">$0.42</span>
+            <span class="price-change-percent price-down"
+              >-1.05% <i class="fas fa-arrow-down"></i
+            ></span>
+          </div>
+        </div>
+
+        <div class="currency-row">
+          <div class="currency-info">
+            <img
+              src="https://cryptologos.cc/logos/dogecoin-doge-logo.png"
+              alt="Dogecoin"
+              class="currency-logo"
+            />
+            <div class="currency-name-wrapper">
+              <span class="currency-name">Dogecoin</span>
+              <span class="currency-symbol">DOGE</span>
+            </div>
+          </div>
+          <div class="currency-price-wrapper">
+            <span class="currency-price">$0.093</span>
+            <span class="price-change-percent price-up"
+              >+2.17% <i class="fas fa-arrow-up"></i
+            ></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gainers & Losers Section -->
+      <div style="margin: 20px 0 15px">
+        <h2 class="sub-header">Top Gainers & Losers</h2>
+
+        <!-- Tabs for Gainers & Losers -->
+        <div class="tab-container">
+          <div class="tab active" onclick="changeTab(this, 'gainers')">
+            Gainers
+          </div>
+          <div class="tab" onclick="changeTab(this, 'losers')">Losers</div>
+        </div>
+
+        <!-- Gainers Tab Content -->
+        <div id="gainers" class="tab-content">
+          <div class="card">
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/solana-sol-logo.png"
+                  alt="Solana"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Solana</span>
+                  <span class="currency-symbol">SOL</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$128.45</span>
+                <span class="price-change-percent price-up"
+                  >+9.21% <i class="fas fa-arrow-up"></i
+                ></span>
+              </div>
+            </div>
+
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/polygon-matic-logo.png"
+                  alt="Polygon"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Polygon</span>
+                  <span class="currency-symbol">MATIC</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$0.62</span>
+                <span class="price-change-percent price-up"
+                  >+8.94% <i class="fas fa-arrow-up"></i
+                ></span>
+              </div>
+            </div>
+
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/avalanche-avax-logo.png"
+                  alt="Avalanche"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Avalanche</span>
+                  <span class="currency-symbol">AVAX</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$32.76</span>
+                <span class="price-change-percent price-up"
+                  >+7.82% <i class="fas fa-arrow-up"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Losers Tab Content -->
+        <div id="losers" class="tab-content" style="display: none">
+          <div class="card">
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/cardano-ada-logo.png"
+                  alt="Cardano"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Cardano</span>
+                  <span class="currency-symbol">ADA</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$0.42</span>
+                <span class="price-change-percent price-down"
+                  >-1.05% <i class="fas fa-arrow-down"></i
+                ></span>
+              </div>
+            </div>
+
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/chainlink-link-logo.png"
+                  alt="Chainlink"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Chainlink</span>
+                  <span class="currency-symbol">LINK</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$13.31</span>
+                <span class="price-change-percent price-down"
+                  >-2.45% <i class="fas fa-arrow-down"></i
+                ></span>
+              </div>
+            </div>
+
+            <div class="currency-row">
+              <div class="currency-info">
+                <img
+                  src="https://cryptologos.cc/logos/uniswap-uni-logo.png"
+                  alt="Uniswap"
+                  class="currency-logo"
+                />
+                <div class="currency-name-wrapper">
+                  <span class="currency-name">Uniswap</span>
+                  <span class="currency-symbol">UNI</span>
+                </div>
+              </div>
+              <div class="currency-price-wrapper">
+                <span class="currency-price">$7.19</span>
+                <span class="price-change-percent price-down"
+                  >-3.72% <i class="fas fa-arrow-down"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navigation-bar">
+      <a href="home.html" class="nav-item active">
+        <div class="nav-icon"><i class="fas fa-home"></i></div>
+        <div>Home</div>
+      </a>
+      <a href="search.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-search"></i></div>
+        <div>Search</div>
+      </a>
+      <a href="watchlist.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-star"></i></div>
+        <div>Watchlist</div>
+      </a>
+      <a href="news.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+        <div>News</div>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-user"></i></div>
+        <div>Profile</div>
+      </a>
+    </div>
+
+    <script>
+      // JavaScript for tab functionality
+      function changeTab(tab, tabName) {
+        // Hide all tab content
+        document.querySelectorAll('.tab-content').forEach((content) => {
+          content.style.display = 'none';
+        });
+
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab').forEach((t) => {
+          t.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabName).style.display = 'block';
+
+        // Add active class to selected tab
+        tab.classList.add('active');
+      }
+
+      // Initialize the market chart
+      document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        const marketChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+            datasets: [
+              {
+                label: 'Market Cap',
+                data: [
+                  1.18, 1.19, 1.21, 1.2, 1.22, 1.21, 1.23, 1.22, 1.24, 1.23,
+                  1.24, 1.24,
+                ],
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: '#3b82f6',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 0,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return `$${context.raw}T`;
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  display: false,
+                },
+              },
+              y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  display: false,
+                },
+              },
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

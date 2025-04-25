@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - Financial App Prototype</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: #f5f7fa;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      .prototype-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .phone-frame {
+        width: 375px;
+        height: 812px;
+        background-color: white;
+        border-radius: 40px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        position: relative;
+        border: 10px solid #111;
+      }
+      .phone-frame iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .prototype-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .phone-label {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 10px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="prototype-container">
+      <header class="mb-10 text-center">
+        <h1 class="text-4xl font-bold text-indigo-800 mb-2">CryptoInsight</h1>
+        <p class="text-xl text-gray-600">
+          Cryptocurrency Financial App Prototype
+        </p>
+        <div class="mt-6 mb-8 p-4 bg-blue-50 rounded-lg">
+          <h2 class="text-xl font-semibold mb-3 text-blue-800">
+            User Experience Analysis
+          </h2>
+          <p class="mb-2">
+            <strong>Target Users:</strong> Cryptocurrency investors, traders,
+            and enthusiasts who need real-time market data.
+          </p>
+          <p class="mb-2">
+            <strong>Core Needs:</strong> Price tracking, portfolio management,
+            market insights, and news.
+          </p>
+          <p class="mb-2">
+            <strong>Key Features:</strong> Live price updates, detailed charts,
+            watchlists, market news, and portfolio tracking.
+          </p>
+          <p>
+            <strong>Primary Goals:</strong> Provide comprehensive market data in
+            an intuitive interface with minimal cognitive load.
+          </p>
+        </div>
+        <div class="mt-4 mb-8 p-4 bg-indigo-50 rounded-lg">
+          <h2 class="text-xl font-semibold mb-3 text-indigo-800">
+            Product Interface Planning
+          </h2>
+          <p class="mb-4">
+            The app follows a tab-based navigation structure with the following
+            key screens:
+          </p>
+          <ul class="text-left list-disc pl-10">
+            <li>
+              <strong>Home/Market:</strong> Overview of cryptocurrency market
+              with trending coins
+            </li>
+            <li>
+              <strong>Search:</strong> Find specific cryptocurrencies and add to
+              watchlist
+            </li>
+            <li>
+              <strong>Watchlist:</strong> Personalized list of tracked
+              cryptocurrencies
+            </li>
+            <li>
+              <strong>News:</strong> Latest cryptocurrency and financial news
+            </li>
+            <li><strong>Profile:</strong> User profile and settings</li>
+          </ul>
+        </div>
+      </header>
+
+      <div class="prototype-grid">
+        <div>
+          <div class="phone-frame">
+            <iframe src="home.html" title="Home Screen"></iframe>
+          </div>
+          <div class="phone-label">Home / Market Overview</div>
+        </div>
+
+        <div>
+          <div class="phone-frame">
+            <iframe src="detail.html" title="Cryptocurrency Detail"></iframe>
+          </div>
+          <div class="phone-label">Cryptocurrency Detail</div>
+        </div>
+
+        <div>
+          <div class="phone-frame">
+            <iframe src="search.html" title="Search"></iframe>
+          </div>
+          <div class="phone-label">Search</div>
+        </div>
+
+        <div>
+          <div class="phone-frame">
+            <iframe src="watchlist.html" title="Watchlist"></iframe>
+          </div>
+          <div class="phone-label">Watchlist</div>
+        </div>
+
+        <div>
+          <div class="phone-frame">
+            <iframe src="news.html" title="News"></iframe>
+          </div>
+          <div class="phone-label">News</div>
+        </div>
+
+        <div>
+          <div class="phone-frame">
+            <iframe src="profile.html" title="Profile"></iframe>
+          </div>
+          <div class="phone-label">Profile</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

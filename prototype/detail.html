@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoInsight - Bitcoin Detail</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .coin-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .coin-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        margin-right: 12px;
+        background-color: #f7931a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 22px;
+      }
+
+      .coin-name {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-primary);
+      }
+
+      .coin-ticker {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-left: 8px;
+      }
+
+      .price-container {
+        margin-bottom: 24px;
+      }
+
+      .current-price {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 4px 0;
+      }
+
+      .price-change {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .price-change.positive {
+        color: var(--success-color);
+      }
+
+      .price-change.negative {
+        color: var(--danger-color);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .action-button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--card-bg);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .action-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .action-icon {
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+
+      .action-text {
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .time-filters {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        background-color: var(--card-bg);
+        padding: 6px;
+      }
+
+      .time-filter {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+
+      .time-filter.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .chart-container {
+        width: 100%;
+        height: 220px;
+        margin-bottom: 24px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chart-placeholder {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+      }
+
+      .market-data {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .data-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .data-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+      }
+
+      .data-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .buy-btn {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .sell-btn {
+        background-color: #fee2e2;
+        color: var(--danger-color);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>9:41</span>
+      </div>
+      <div class="status-right">
+        <span class="status-icon"><i class="fas fa-signal"></i></span>
+        <span class="status-icon"><i class="fas fa-wifi"></i></span>
+        <span class="status-icon"><i class="fas fa-battery-full"></i></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Detail Header with Back Button & Coin Info -->
+      <div class="detail-header">
+        <a href="home.html" class="back-button">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="coin-basic-info">
+          <img
+            src="https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+            alt="Bitcoin"
+            width="40"
+            height="40"
+          />
+          <div class="coin-name-area">
+            <div class="coin-full-name">Bitcoin</div>
+            <div class="coin-symbol">BTC</div>
+          </div>
+        </div>
+        <div style="margin-left: auto">
+          <i
+            class="far fa-star"
+            style="font-size: 24px; color: var(--primary-color)"
+          ></i>
+        </div>
+      </div>
+
+      <!-- Price Section -->
+      <div class="price-section">
+        <div class="current-price">$51,342.89</div>
+        <div class="price-change-percent price-up" style="font-size: 16px">
+          +$1,174.65 (+2.34%)
+          <span style="color: var(--text-light)">Today</span>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="chart-period-selector">
+        <div class="period-option">1D</div>
+        <div class="period-option active">1W</div>
+        <div class="period-option">1M</div>
+        <div class="period-option">3M</div>
+        <div class="period-option">1Y</div>
+        <div class="period-option">All</div>
+      </div>
+
+      <div class="chart-container" style="height: 240px">
+        <canvas id="priceChart"></canvas>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Market Cap</div>
+          <div class="stat-value">$998.95B</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Volume (24h)</div>
+          <div class="stat-value">$29.54B</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Circulating Supply</div>
+          <div class="stat-value">19.43M BTC</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Max Supply</div>
+          <div class="stat-value">21.00M BTC</div>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="about-section">
+        <h2 class="sub-header">About Bitcoin</h2>
+        <p
+          style="
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+          "
+        >
+          Bitcoin is a decentralized digital currency, without a central bank or
+          single administrator, that can be sent from user to user on the
+          peer-to-peer bitcoin network without the need for intermediaries.
+        </p>
+        <p style="color: var(--text-secondary); line-height: 1.6">
+          Transactions are verified by network nodes through cryptography and
+          recorded in a public distributed ledger called a blockchain. Bitcoin
+          was invented in 2008 by an unknown person or group of people using the
+          name Satoshi Nakamoto.
+        </p>
+      </div>
+
+      <!-- Price Statistics -->
+      <div class="card">
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px">
+          Price Statistics
+        </h3>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="color: var(--text-secondary)">Bitcoin Price</span>
+          <span style="font-weight: 600">$51,342.89</span>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="color: var(--text-secondary)">24h Low / 24h High</span>
+          <span style="font-weight: 600">$49,678.32 / $52,115.67</span>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="color: var(--text-secondary)">Trading Volume</span>
+          <span style="font-weight: 600">$29.54B</span>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="color: var(--text-secondary)">Market Cap Rank</span>
+          <span style="font-weight: 600">#1</span>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="color: var(--text-secondary)">All-Time High</span>
+          <span style="font-weight: 600">$68,789.63</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <div class="action-btn buy-btn">Buy</div>
+        <div class="action-btn sell-btn">Sell</div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navigation-bar">
+      <a href="home.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-home"></i></div>
+        <div>Home</div>
+      </a>
+      <a href="search.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-search"></i></div>
+        <div>Search</div>
+      </a>
+      <a href="watchlist.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-star"></i></div>
+        <div>Watchlist</div>
+      </a>
+      <a href="news.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+        <div>News</div>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <div class="nav-icon"><i class="fas fa-user"></i></div>
+        <div>Profile</div>
+      </a>
+    </div>
+
+    <script>
+      // Initialize the price chart
+      document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('priceChart').getContext('2d');
+
+        // Generate some realistic-looking Bitcoin price data
+        const labels = [];
+        const data = [];
+        let lastPrice = 49500;
+
+        // Generate 7 days of hourly data (168 points for 1 week)
+        for (let i = 0; i < 168; i++) {
+          labels.push('');
+
+          // Random price change, with a slight upward bias
+          const change = (Math.random() - 0.48) * 500;
+          lastPrice += change;
+
+          // Ensure price doesn't go below a reasonable value
+          if (lastPrice < 48000) lastPrice = 48000 + Math.random() * 300;
+
+          data.push(lastPrice);
+        }
+
+        const priceChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Bitcoin Price (USD)',
+                data: data,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: '#3b82f6',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#3b82f6',
+                pointHoverBorderColor: '#ffffff',
+                pointHoverBorderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return `$${context.raw.toFixed(2)}`;
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  display: false,
+                },
+              },
+              y: {
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.05)',
+                },
+                ticks: {
+                  callback: function (value) {
+                    return '$' + value.toLocaleString();
+                  },
+                  font: {
+                    size: 10,
+                  },
+                  color: '#9ca3af',
+                },
+              },
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+          },
+        });
+
+        // Period selector functionality
+        document.querySelectorAll('.period-option').forEach((option) => {
+          option.addEventListener('click', function () {
+            // Remove active class from all options
+            document
+              .querySelectorAll('.period-option')
+              .forEach((o) => o.classList.remove('active'));
+
+            // Add active class to clicked option
+            this.classList.add('active');
+
+            // In a real app, this would fetch new data for the selected period
+            // For this prototype, we'll just simulate different periods with different data
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

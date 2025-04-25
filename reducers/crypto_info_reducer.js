@@ -13,7 +13,7 @@ export default function (
     list: null,
     selectedCrypto: null,
     selectedChartData: null,
-    sortOptions: { marketCap: 'desc', percentChange: '' },
+    sortOptions: { marketCap: 'desc', price: '', percentChange: '' },
     error: null,
   },
   action
