@@ -10,6 +10,7 @@ import HomeScreen from './screens/HomeScreen';
 import WatchlistScreen from './screens/WatchlistScreen';
 import NewsScreen from './screens/NewsScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SearchScreen from './screens/SearchScreen';
 import Theme from './tools/Theme';
 
 // 只在Web环境中导入适配器
@@ -109,6 +110,14 @@ export default function App() {
               component={ProfileScreen}
               options={{
                 title: 'Profile',
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Search"
+              component={SearchScreen}
+              options={{
+                title: 'Search',
                 headerShown: false,
               }}
             />

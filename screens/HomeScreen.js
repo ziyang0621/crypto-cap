@@ -40,6 +40,7 @@ const HomeScreen = ({
     volumeChange: '+5.1%',
   });
   const [themeColors, setThemeColors] = useState(Theme.colors);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     // 加载加密货币数据
@@ -58,7 +59,7 @@ const HomeScreen = ({
 
     // 清理函数
     return () => unsubscribe();
-  }, []);
+  }, [colorScheme]);
 
   // 更新导航栏样式
   const updateNavigationOptions = () => {
@@ -66,11 +67,15 @@ const HomeScreen = ({
     navigation.setOptions({
       headerTitle: 'Market',
       headerStyle: {
-        backgroundColor: colors.headerBackground,
+        backgroundColor:
+          colorScheme === 'dark'
+            ? colors.darkBackground
+            : colors.lightBackground,
         elevation: 0, // for Android
         shadowOpacity: 0, // for iOS
       },
-      headerTintColor: colors.headerTintColor,
+      headerTintColor:
+        colorScheme === 'dark' ? colors.darkText : colors.lightText,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -80,6 +85,24 @@ const HomeScreen = ({
   // 切换标签
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
+    // 更新导航栏标题和样式
+    const colors = Theme.getColors();
+    navigation.setOptions({
+      headerTitle: tabName === 'gainers' ? 'Top Gainers' : 'Top Losers',
+      headerStyle: {
+        backgroundColor:
+          colorScheme === 'dark'
+            ? colors.darkBackground
+            : colors.lightBackground,
+        elevation: 0,
+        shadowOpacity: 0,
+      },
+      headerTintColor:
+        colorScheme === 'dark' ? colors.darkText : colors.lightText,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    });
   };
 
   // 获取热门币种（前5名）
@@ -203,194 +226,204 @@ const HomeScreen = ({
         backgroundColor={themeColors.headerBackground}
         barStyle={themeColors.statusBarStyle}
       />
-      <ScrollView style={styles(themeColors).scrollView}>
-        {/* Header with welcome message and profile */}
-        <View style={styles(themeColors).headerContainer}>
-          <View>
-            <Text style={styles(themeColors).pageHeader}>Market</Text>
-            <Text style={styles(themeColors).welcomeText}>
-              Welcome back, Alex!
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Avatar
-              source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
-              rounded
-              size="medium"
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Market Overview Card */}
-        <View style={styles(themeColors).card}>
-          <View style={styles(themeColors).cardHeader}>
-            <Text style={styles(themeColors).subHeader}>Market Overview</Text>
-            <Text style={styles(themeColors).timeframeText}>24h</Text>
-          </View>
-
-          {/* Chart */}
-          <View style={styles(themeColors).chartContainer}>
-            <VictoryChart
-              height={200}
-              padding={{ top: 10, bottom: 30, left: 40, right: 40 }}
-            >
-              <VictoryArea
-                data={chartData}
-                style={{
-                  data: {
-                    fill: themeColors.chartFill,
-                    stroke: themeColors.chartStroke,
-                    strokeWidth: 2,
-                  },
-                }}
-                interpolation="natural"
-              />
-              <VictoryAxis
-                style={{
-                  axis: { stroke: 'transparent' },
-                  ticks: { stroke: 'transparent' },
-                  tickLabels: { fill: 'transparent' },
-                  grid: { stroke: 'transparent' },
-                }}
-              />
-              <VictoryAxis
-                dependentAxis
-                style={{
-                  axis: { stroke: 'transparent' },
-                  ticks: { stroke: 'transparent' },
-                  tickLabels: { fill: 'transparent' },
-                  grid: { stroke: 'transparent' },
-                }}
-              />
-            </VictoryChart>
-          </View>
-
-          {/* Market stats */}
-          <View style={styles(themeColors).gridCols2}>
-            <View style={styles(themeColors).statCard}>
-              <Text style={styles(themeColors).statLabel}>Market Cap</Text>
-              <Text style={styles(themeColors).statValue}>
-                ${marketData.marketCap}
-              </Text>
-              <Text style={styles(themeColors).priceUp}>
-                {marketData.marketCapChange}{' '}
-                <Icon
-                  name="arrow-up"
-                  type="font-awesome"
-                  size={12}
-                  color={themeColors.success}
-                />
+      <View style={styles(themeColors).contentContainer}>
+        <ScrollView
+          style={styles(themeColors).scrollView}
+          contentContainerStyle={styles(themeColors).scrollViewContent}
+        >
+          {/* Header with welcome message and profile */}
+          <View style={styles(themeColors).headerContainer}>
+            <View>
+              <Text style={styles(themeColors).pageHeader}>Market</Text>
+              <Text style={styles(themeColors).welcomeText}>
+                Welcome back, Alex!
               </Text>
             </View>
-            <View style={styles(themeColors).statCard}>
-              <Text style={styles(themeColors).statLabel}>24h Volume</Text>
-              <Text style={styles(themeColors).statValue}>
-                ${marketData.volume}
-              </Text>
-              <Text style={styles(themeColors).priceUp}>
-                {marketData.volumeChange}{' '}
-                <Icon
-                  name="arrow-up"
-                  type="font-awesome"
-                  size={12}
-                  color={themeColors.success}
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <Avatar
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/32.jpg',
+                }}
+                rounded
+                size="medium"
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Market Overview Card */}
+          <View style={styles(themeColors).card}>
+            <View style={styles(themeColors).cardHeader}>
+              <Text style={styles(themeColors).subHeader}>Market Overview</Text>
+              <Text style={styles(themeColors).timeframeText}>24h</Text>
+            </View>
+
+            {/* Chart */}
+            <View style={styles(themeColors).chartContainer}>
+              <VictoryChart
+                height={200}
+                padding={{ top: 10, bottom: 30, left: 40, right: 40 }}
+              >
+                <VictoryArea
+                  data={chartData}
+                  style={{
+                    data: {
+                      fill: themeColors.chartFill,
+                      stroke: themeColors.chartStroke,
+                      strokeWidth: 2,
+                    },
+                  }}
+                  interpolation="natural"
                 />
-              </Text>
+                <VictoryAxis
+                  style={{
+                    axis: { stroke: 'transparent' },
+                    ticks: { stroke: 'transparent' },
+                    tickLabels: { fill: 'transparent' },
+                    grid: { stroke: 'transparent' },
+                  }}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    axis: { stroke: 'transparent' },
+                    ticks: { stroke: 'transparent' },
+                    tickLabels: { fill: 'transparent' },
+                    grid: { stroke: 'transparent' },
+                  }}
+                />
+              </VictoryChart>
+            </View>
+
+            {/* Market stats */}
+            <View style={styles(themeColors).gridCols2}>
+              <View style={styles(themeColors).statCard}>
+                <Text style={styles(themeColors).statLabel}>Market Cap</Text>
+                <Text style={styles(themeColors).statValue}>
+                  ${marketData.marketCap}
+                </Text>
+                <Text style={styles(themeColors).priceUp}>
+                  {marketData.marketCapChange}{' '}
+                  <Icon
+                    name="arrow-up"
+                    type="font-awesome"
+                    size={12}
+                    color={themeColors.success}
+                  />
+                </Text>
+              </View>
+              <View style={styles(themeColors).statCard}>
+                <Text style={styles(themeColors).statLabel}>24h Volume</Text>
+                <Text style={styles(themeColors).statValue}>
+                  ${marketData.volume}
+                </Text>
+                <Text style={styles(themeColors).priceUp}>
+                  {marketData.volumeChange}{' '}
+                  <Icon
+                    name="arrow-up"
+                    type="font-awesome"
+                    size={12}
+                    color={themeColors.success}
+                  />
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Trending Coins Section */}
-        <View style={styles(themeColors).sectionHeader}>
-          <Text style={styles(themeColors).subHeader}>Trending Coins</Text>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('CryptoList', { source: 'trending' })
-            }
-          >
-            <Text style={styles(themeColors).seeAllText}>See All</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Trending Coins List */}
-        <View style={styles(themeColors).card}>
-          {getTrendingCoins().map((crypto) => renderCryptoItem(crypto))}
-        </View>
-
-        {/* Gainers & Losers Section */}
-        <View style={styles(themeColors).sectionContainer}>
+          {/* Trending Coins Section */}
           <View style={styles(themeColors).sectionHeader}>
-            <Text style={styles(themeColors).subHeader}>
-              Top Gainers & Losers
-            </Text>
+            <Text style={styles(themeColors).subHeader}>Trending Coins</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('CryptoList', {
-                  source: activeTab === 'gainers' ? 'gainers' : 'losers',
-                })
+                navigation.navigate('CryptoList', { source: 'trending' })
               }
             >
               <Text style={styles(themeColors).seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Tabs */}
-          <View style={styles(themeColors).tabContainer}>
-            <TouchableOpacity
-              style={[
-                styles(themeColors).tab,
-                activeTab === 'gainers' && styles(themeColors).activeTab,
-              ]}
-              onPress={() => handleTabChange('gainers')}
-            >
-              <Text
-                style={[
-                  styles(themeColors).tabText,
-                  activeTab === 'gainers' && styles(themeColors).activeTabText,
-                ]}
-              >
-                Gainers
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles(themeColors).tab,
-                activeTab === 'losers' && styles(themeColors).activeTab,
-              ]}
-              onPress={() => handleTabChange('losers')}
-            >
-              <Text
-                style={[
-                  styles(themeColors).tabText,
-                  activeTab === 'losers' && styles(themeColors).activeTabText,
-                ]}
-              >
-                Losers
-              </Text>
-            </TouchableOpacity>
+          {/* Trending Coins List */}
+          <View style={styles(themeColors).card}>
+            {getTrendingCoins().map((crypto) => renderCryptoItem(crypto))}
           </View>
 
-          {/* Tab Content */}
-          <View style={styles(themeColors).tabContent}>
-            {activeTab === 'gainers' ? (
-              <View style={styles(themeColors).card}>
-                {getTopGainers().map((crypto) => renderCryptoItem(crypto))}
-              </View>
-            ) : (
-              <View style={styles(themeColors).card}>
-                {getTopLosers().map((crypto) => renderCryptoItem(crypto))}
-              </View>
-            )}
+          {/* Gainers & Losers Section */}
+          <View style={styles(themeColors).sectionContainer}>
+            <View style={styles(themeColors).sectionHeader}>
+              <Text style={styles(themeColors).subHeader}>
+                Top Gainers & Losers
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('CryptoList', {
+                    source: activeTab === 'gainers' ? 'gainers' : 'losers',
+                  })
+                }
+              >
+                <Text style={styles(themeColors).seeAllText}>See All</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Tabs */}
+            <View style={styles(themeColors).tabContainer}>
+              <TouchableOpacity
+                style={[
+                  styles(themeColors).tab,
+                  activeTab === 'gainers' && styles(themeColors).activeTab,
+                ]}
+                onPress={() => handleTabChange('gainers')}
+              >
+                <Text
+                  style={[
+                    styles(themeColors).tabText,
+                    activeTab === 'gainers' &&
+                      styles(themeColors).activeTabText,
+                  ]}
+                >
+                  Gainers
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles(themeColors).tab,
+                  activeTab === 'losers' && styles(themeColors).activeTab,
+                ]}
+                onPress={() => handleTabChange('losers')}
+              >
+                <Text
+                  style={[
+                    styles(themeColors).tabText,
+                    activeTab === 'losers' && styles(themeColors).activeTabText,
+                  ]}
+                >
+                  Losers
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Tab Content */}
+            <View style={styles(themeColors).tabContent}>
+              {activeTab === 'gainers' ? (
+                <View style={styles(themeColors).card}>
+                  {getTopGainers().map((crypto) => renderCryptoItem(crypto))}
+                </View>
+              ) : (
+                <View style={styles(themeColors).card}>
+                  {getTopLosers().map((crypto) => renderCryptoItem(crypto))}
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
 
       {/* Bottom Navigation Bar */}
-      <BottomNavBar
-        navigation={navigation}
-        activeScreen="Home"
-        themeColors={themeColors}
-      />
+      <View style={styles(themeColors).bottomNavContainer}>
+        <BottomNavBar
+          navigation={navigation}
+          activeScreen="Home"
+          themeColors={themeColors}
+        />
+      </View>
     </View>
   );
 };
@@ -401,9 +434,27 @@ const styles = (colors) =>
       flex: 1,
       backgroundColor: colors.backgroundColor,
     },
+    contentContainer: {
+      flex: 1,
+      marginBottom: 60, // Add margin to account for bottom navigation bar
+    },
     scrollView: {
+      flex: 1,
       paddingHorizontal: 16,
-      paddingBottom: 80,
+    },
+    scrollViewContent: {
+      paddingBottom: 20, // Reduced padding since we have marginBottom in contentContainer
+    },
+    bottomNavContainer: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 60, // Fixed height for bottom navigation
+      backgroundColor: colors.backgroundColor,
+      borderTopWidth: 1,
+      borderTopColor: colors.borderColor,
+      zIndex: 1000, // Ensure it stays on top
     },
     headerContainer: {
       flexDirection: 'row',
@@ -491,6 +542,33 @@ const styles = (colors) =>
       fontWeight: '600',
       fontSize: 14,
     },
+    sectionContainer: {
+      marginVertical: 15,
+    },
+    tabContainer: {
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderColor,
+      marginVertical: 15,
+    },
+    tab: {
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+    },
+    tabText: {
+      fontWeight: '600',
+      color: colors.textLight,
+    },
+    activeTab: {
+      borderBottomWidth: 2,
+      borderBottomColor: colors.primary,
+    },
+    activeTabText: {
+      color: colors.primary,
+    },
+    tabContent: {
+      marginBottom: 16,
+    },
     currencyRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -535,33 +613,6 @@ const styles = (colors) =>
       fontSize: 14,
       fontWeight: '500',
       marginRight: 4,
-    },
-    sectionContainer: {
-      marginVertical: 15,
-    },
-    tabContainer: {
-      flexDirection: 'row',
-      borderBottomWidth: 1,
-      borderBottomColor: colors.borderColor,
-      marginVertical: 15,
-    },
-    tab: {
-      paddingVertical: 10,
-      paddingHorizontal: 16,
-    },
-    tabText: {
-      fontWeight: '600',
-      color: colors.textLight,
-    },
-    activeTab: {
-      borderBottomWidth: 2,
-      borderBottomColor: colors.primary,
-    },
-    activeTabText: {
-      color: colors.primary,
-    },
-    tabContent: {
-      marginBottom: 16,
     },
   });
 

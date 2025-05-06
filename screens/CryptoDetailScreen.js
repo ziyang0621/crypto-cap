@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Util from '../tools/Util';
 import LineChart from '../components/LineChart';
+import EnhancedLineChart from '../components/EnhancedLineChart';
 import Theme from '../tools/Theme';
 
 class CryptoDetailScreen extends Component {
@@ -565,7 +566,7 @@ class CryptoDetailScreen extends Component {
             {dataInfoView}
             {this.renderTimeRangeSelector()}
             <View style={styles.lineChartContainer}>
-              <LineChart
+              <EnhancedLineChart
                 chartData={priceData}
                 onDataPointTouchStart={(dataPoint) => {
                   this.setState({
@@ -583,6 +584,9 @@ class CryptoDetailScreen extends Component {
                     selectedDataPoint: {},
                   });
                 }}
+                height={230}
+                showGradient={true}
+                animate={true}
               />
             </View>
           </View>
@@ -1165,8 +1169,13 @@ const styles = StyleSheet.create({
   },
   chartView: {
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   chartLoadingView: {
     height: 250,
@@ -1209,6 +1218,11 @@ const styles = StyleSheet.create({
   },
   lineChartContainer: {
     alignItems: 'center',
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 16,
+    overflow: 'hidden',
   },
   percentChangeCard: {
     padding: 16,

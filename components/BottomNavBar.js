@@ -27,7 +27,7 @@ const BottomNavBar = ({ navigation, activeScreen, themeColors }) => {
 
   const screens = [
     { name: 'Home', icon: 'home' },
-    { name: 'CryptoList', icon: 'search', label: 'Search' },
+    { name: 'Search', icon: 'search', label: 'Search' },
     { name: 'Watchlist', icon: 'star' },
     { name: 'News', icon: 'newspaper-o' },
     { name: 'Profile', icon: 'user' },

@@ -12,6 +12,7 @@ import {
   AppState,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {
   Avatar,
@@ -25,6 +26,7 @@ import Util from '../tools/Util';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Theme from '../tools/Theme';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const infoList = ['price_usd', 'price_btc', 'price_eth'];
 
@@ -49,7 +51,6 @@ class CryptoListScreen extends Component {
 
   componentDidMount() {
     const { route } = this.props;
-    // 安全地访问route.params，如果不存在则为null或默认对象
     const source = route && route.params ? route.params.source : null;
 
     // 设置基于导航来源的适当标题
@@ -87,77 +88,50 @@ class CryptoListScreen extends Component {
   }
 
   updateNavigationOptions = (source) => {
-    // 设置基于导航来源的适当标题
-    let headerTitle = this.getHeaderTitle();
-    if (source === 'trending') {
-      headerTitle = 'Trending Coins';
-    } else if (source === 'gainers') {
-      headerTitle = 'Top Gainers';
+    const { navigation } = this.props;
+    const colorScheme = Theme.getColorScheme();
+    const { themeColors } = this.state;
+
+    // 根据来源和主题设置导航栏样式
+    const headerStyle = {
+      backgroundColor:
+        colorScheme === 'dark'
+          ? themeColors.darkBackground
+          : themeColors.lightBackground,
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    };
+
+    const headerTintColor =
+      colorScheme === 'dark' ? themeColors.darkText : themeColors.lightText;
+
+    // 设置标题
+    let title = 'Cryptocurrencies';
+    if (source === 'gainers') {
+      title = 'Top Gainers';
     } else if (source === 'losers') {
-      headerTitle = 'Top Losers';
+      title = 'Top Losers';
+    } else if (source === 'trending') {
+      title = 'Trending Coins';
     }
 
-    const { themeColors } = this.state;
-    const isFromSeeAll =
-      source === 'trending' || source === 'gainers' || source === 'losers';
-
-    this.props.navigation.setOptions({
-      headerTitle: headerTitle,
-      headerStyle: {
-        backgroundColor: themeColors.headerBackground,
-        elevation: isFromSeeAll ? 0 : 1,
-        shadowOpacity: isFromSeeAll ? 0 : 0.1,
+    navigation.setOptions({
+      title,
+      headerStyle,
+      headerTintColor,
+      headerTitleStyle: {
+        color: headerTintColor,
+        fontWeight: '600',
       },
-      headerTintColor: themeColors.headerTintColor,
-      headerLeft: isFromSeeAll
-        ? ({ tintColor }) => (
-            <TouchableOpacity
-              style={{ paddingLeft: 16 }}
-              onPress={() => {
-                try {
-                  // 检查是否可以返回，如果可以则使用goBack()
-                  if (this.props.navigation.canGoBack()) {
-                    this.props.navigation.goBack();
-                  } else {
-                    // 如果无法返回，则重置到Home
-                    this.props.navigation.reset({
-                      index: 0,
-                      routes: [{ name: 'Home' }],
-                    });
-                  }
-                } catch (error) {
-                  console.log('Navigation error:', error);
-                  // 出错后的安全处理，确保应用不会崩溃
-                  this.props.navigation.navigate('Home');
-                }
-              }}
-            >
-              <Icon
-                name="arrow-left"
-                type="font-awesome"
-                size={20}
-                color={tintColor}
-              />
-            </TouchableOpacity>
-          )
-        : undefined,
-      headerRight: isFromSeeAll
-        ? undefined
-        : () => (
-            <Icon
-              name="exchange"
-              type="font-awesome"
-              color={themeColors.textLight}
-              size={25}
-              onPress={this.toggleInfoType}
-              containerStyle={{ marginRight: 15 }}
-            />
-          ),
     });
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.infoListIndex !== this.state.infoListIndex) {
+    if (
+      prevState.infoListIndex !== this.state.infoListIndex ||
+      prevState.themeColors !== this.state.themeColors
+    ) {
       const { route } = this.props;
       const source = route.params?.source;
       this.updateNavigationOptions(source);
@@ -762,6 +736,7 @@ class CryptoListScreen extends Component {
     const { searchText, selectedIndex, refreshing, themeColors, totalCoins } =
       this.state;
     const { route } = this.props;
+    const colorScheme = Theme.getColorScheme();
 
     // 安全地访问route参数
     const source = route && route.params ? route.params.source : null;
@@ -778,7 +753,12 @@ class CryptoListScreen extends Component {
       <View
         style={[
           styles.containerView,
-          { backgroundColor: themeColors.backgroundColor },
+          {
+            backgroundColor:
+              colorScheme === 'dark'
+                ? themeColors.darkBackground
+                : themeColors.lightBackground,
+          },
         ]}
       >
         {isFromSeeAll ? (
@@ -787,34 +767,13 @@ class CryptoListScreen extends Component {
             style={{
               paddingHorizontal: 16,
               paddingVertical: 12,
-              backgroundColor: themeColors.cardBackground,
+              backgroundColor:
+                colorScheme === 'dark'
+                  ? themeColors.darkBackground
+                  : themeColors.lightBackground,
               marginBottom: 10,
             }}
           >
-            <SearchBar
-              placeholder="Search Cryptocurrencies..."
-              onChangeText={this.searchTextChange}
-              value={searchText}
-              containerStyle={{
-                backgroundColor: 'transparent',
-                borderTopWidth: 0,
-                borderBottomWidth: 0,
-                padding: 0,
-                marginBottom: 8,
-              }}
-              inputContainerStyle={{
-                backgroundColor: themeColors.inputBackground,
-                borderRadius: 12,
-                height: 40,
-              }}
-              inputStyle={{ color: themeColors.textPrimary }}
-              placeholderTextColor={themeColors.textLight}
-              searchIcon={{ color: themeColors.textLight, size: 20 }}
-              clearIcon={{ color: themeColors.textLight, size: 20 }}
-              round
-              lightTheme={Theme.getColorScheme() === 'light'}
-            />
-
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -825,18 +784,31 @@ class CryptoListScreen extends Component {
                   backgroundColor:
                     selectedIndex === 0
                       ? themeColors.primary
-                      : themeColors.inputBackground,
+                      : colorScheme === 'dark'
+                      ? themeColors.darkBackground
+                      : themeColors.lightBackground,
                   paddingHorizontal: 16,
                   paddingVertical: 8,
                   borderRadius: 20,
                   marginRight: 10,
+                  borderWidth: 1,
+                  borderColor:
+                    selectedIndex === 0
+                      ? themeColors.primary
+                      : colorScheme === 'dark'
+                      ? themeColors.darkText
+                      : themeColors.lightText,
                 }}
                 onPress={() => this.updateIndex(0)}
               >
                 <Text
                   style={{
                     color:
-                      selectedIndex === 0 ? '#fff' : themeColors.textSecondary,
+                      selectedIndex === 0
+                        ? '#fff'
+                        : colorScheme === 'dark'
+                        ? themeColors.darkTextLight
+                        : themeColors.lightTextLight,
                     fontWeight: '600',
                     fontSize: 14,
                   }}
@@ -850,18 +822,31 @@ class CryptoListScreen extends Component {
                   backgroundColor:
                     selectedIndex === 1
                       ? themeColors.primary
-                      : themeColors.inputBackground,
+                      : colorScheme === 'dark'
+                      ? themeColors.darkBackground
+                      : themeColors.lightBackground,
                   paddingHorizontal: 16,
                   paddingVertical: 8,
                   borderRadius: 20,
                   marginRight: 10,
+                  borderWidth: 1,
+                  borderColor:
+                    selectedIndex === 1
+                      ? themeColors.primary
+                      : colorScheme === 'dark'
+                      ? themeColors.darkText
+                      : themeColors.lightText,
                 }}
                 onPress={() => this.updateIndex(1)}
               >
                 <Text
                   style={{
                     color:
-                      selectedIndex === 1 ? '#fff' : themeColors.textSecondary,
+                      selectedIndex === 1
+                        ? '#fff'
+                        : colorScheme === 'dark'
+                        ? themeColors.darkTextLight
+                        : themeColors.lightTextLight,
                     fontWeight: '600',
                     fontSize: 14,
                   }}
@@ -875,17 +860,30 @@ class CryptoListScreen extends Component {
                   backgroundColor:
                     selectedIndex === 2
                       ? themeColors.primary
-                      : themeColors.inputBackground,
+                      : colorScheme === 'dark'
+                      ? themeColors.darkBackground
+                      : themeColors.lightBackground,
                   paddingHorizontal: 16,
                   paddingVertical: 8,
                   borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor:
+                    selectedIndex === 2
+                      ? themeColors.primary
+                      : colorScheme === 'dark'
+                      ? themeColors.darkText
+                      : themeColors.lightText,
                 }}
                 onPress={() => this.updateIndex(2)}
               >
                 <Text
                   style={{
                     color:
-                      selectedIndex === 2 ? '#fff' : themeColors.textSecondary,
+                      selectedIndex === 2
+                        ? '#fff'
+                        : colorScheme === 'dark'
+                        ? themeColors.darkTextLight
+                        : themeColors.lightTextLight,
                     fontWeight: '600',
                     fontSize: 14,
                   }}
@@ -913,7 +911,7 @@ class CryptoListScreen extends Component {
               inputStyle={{ color: themeColors.textPrimary }}
               placeholderTextColor={themeColors.textLight}
               round
-              lightTheme={Theme.getColorScheme() === 'light'}
+              lightTheme={colorScheme === 'light'}
             />
 
             <ButtonGroup
@@ -1106,6 +1104,21 @@ const styles = {
     backgroundColor: '#031622',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  searchBarContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    height: 44,
+    borderRadius: 10,
+  },
+  searchPlaceholder: {
+    marginLeft: 8,
+    fontSize: 16,
   },
 };
 
