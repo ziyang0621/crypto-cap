@@ -24,6 +24,7 @@ import moment from 'moment';
 import Util from '../tools/Util';
 import BottomNavBar from '../components/BottomNavBar';
 import Theme from '../tools/Theme';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const HomeScreen = ({
   navigation,
@@ -194,11 +195,11 @@ const HomeScreen = ({
               {isPositive ? '+' : ''}
               {crypto.percent_change_24h}%
             </Text>
-            <Icon
-              name={isPositive ? 'arrow-up' : 'arrow-down'}
-              type="font-awesome"
-              size={12}
+            <MaterialIcons
+              name={isPositive ? 'arrow-upward' : 'arrow-downward'}
+              size={18}
               color={isPositive ? themeColors.success : themeColors.danger}
+              style={{ marginLeft: 2 }}
             />
           </View>
         </View>
@@ -304,11 +305,11 @@ const HomeScreen = ({
                 </Text>
                 <Text style={styles(themeColors).priceUp}>
                   {marketData.marketCapChange}{' '}
-                  <Icon
-                    name="arrow-up"
-                    type="font-awesome"
-                    size={12}
+                  <MaterialIcons
+                    name="arrow-upward"
+                    size={18}
                     color={themeColors.success}
+                    style={{ marginLeft: 2 }}
                   />
                 </Text>
               </View>
@@ -319,11 +320,11 @@ const HomeScreen = ({
                 </Text>
                 <Text style={styles(themeColors).priceUp}>
                   {marketData.volumeChange}{' '}
-                  <Icon
-                    name="arrow-up"
-                    type="font-awesome"
-                    size={12}
+                  <MaterialIcons
+                    name="arrow-upward"
+                    size={18}
                     color={themeColors.success}
+                    style={{ marginLeft: 2 }}
                   />
                 </Text>
               </View>

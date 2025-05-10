@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Theme from '../tools/Theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const infoList = ['price_usd', 'price_btc', 'price_eth'];
 
@@ -94,13 +95,15 @@ class CryptoListScreen extends Component {
 
     // 根据来源和主题设置导航栏样式
     const headerStyle = {
-      backgroundColor: colorScheme === 'dark' ? '#000000' : themeColors.lightBackground,
+      backgroundColor:
+        colorScheme === 'dark' ? '#000000' : themeColors.lightBackground,
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
     };
 
-    const headerTintColor = colorScheme === 'dark' ? '#FFFFFF' : themeColors.lightText;
+    const headerTintColor =
+      colorScheme === 'dark' ? '#FFFFFF' : themeColors.lightText;
 
     // 设置标题
     let title = 'Cryptocurrencies';
@@ -340,11 +343,11 @@ class CryptoListScreen extends Component {
                 {isPositive ? '+' : ''}
                 {item.percent_change_24h}%
               </Text>
-              <Icon
-                name={isPositive ? 'arrow-up' : 'arrow-down'}
-                type="font-awesome"
-                size={12}
+              <MaterialIcons
+                name={isPositive ? 'arrow-upward' : 'arrow-downward'}
+                size={18}
                 color={isPositive ? themeColors.success : themeColors.danger}
+                style={{ marginLeft: 2 }}
               />
             </View>
           </View>
@@ -975,19 +978,19 @@ class CryptoListScreen extends Component {
                           {parseFloat(item.percent_change_24h) >= 0 ? '+' : ''}
                           {item.percent_change_24h}%
                         </Text>
-                        <Icon
+                        <MaterialIcons
                           name={
                             parseFloat(item.percent_change_24h) >= 0
-                              ? 'arrow-up'
-                              : 'arrow-down'
+                              ? 'arrow-upward'
+                              : 'arrow-downward'
                           }
-                          type="font-awesome"
-                          size={12}
+                          size={18}
                           color={
                             parseFloat(item.percent_change_24h) >= 0
                               ? themeColors.success
                               : themeColors.danger
                           }
+                          style={{ marginLeft: 2 }}
                         />
                       </View>
                     </View>

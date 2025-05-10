@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Theme from '../tools/Theme';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const BottomNavBar = ({ navigation, activeScreen, themeColors }) => {
   const [colors, setColors] = useState(themeColors || Theme.colors);
@@ -29,8 +30,8 @@ const BottomNavBar = ({ navigation, activeScreen, themeColors }) => {
     { name: 'Home', icon: 'home' },
     { name: 'Search', icon: 'search', label: 'Search' },
     { name: 'Watchlist', icon: 'star' },
-    { name: 'News', icon: 'newspaper-o' },
-    { name: 'Profile', icon: 'user' },
+    { name: 'News', icon: 'article' },
+    { name: 'Profile', icon: 'person' },
   ];
 
   return (
@@ -41,10 +42,9 @@ const BottomNavBar = ({ navigation, activeScreen, themeColors }) => {
           style={styles(colors).navItem}
           onPress={() => navigation.navigate(screen.name)}
         >
-          <Icon
+          <MaterialIcons
             name={screen.icon}
-            type="font-awesome"
-            size={22}
+            size={26}
             color={
               activeScreen === screen.name ? colors.primary : colors.textLight
             }
