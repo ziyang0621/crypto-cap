@@ -14,7 +14,8 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { Avatar, Icon, Button, Card, Divider } from 'react-native-elements';
+import { Avatar, Button, Card, Divider } from 'react-native-elements';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Util from '../tools/Util';
@@ -243,10 +244,9 @@ class CryptoDetailScreen extends Component {
             this.props.navigation.goBack();
           }}
         >
-          <Icon
-            name="arrow-left"
-            type="font-awesome"
-            size={20}
+          <MaterialCommunityIcons
+            name="chevron-left"
+            size={24}
             color={themeColors.headerTintColor}
           />
         </TouchableOpacity>
@@ -256,9 +256,8 @@ class CryptoDetailScreen extends Component {
           style={{ paddingRight: 16, padding: 8 }}
           onPress={this.toggleFavorite}
         >
-          <Icon
+          <FontAwesome
             name={this.state.isFavorite ? 'star' : 'star-o'}
-            type="font-awesome"
             size={20}
             color={
               this.state.isFavorite ? '#FFD700' : themeColors.headerTintColor
@@ -676,16 +675,15 @@ class CryptoDetailScreen extends Component {
               })}
             </Text>
             <View style={styles.percentChangeContainer}>
-              <Icon
+              <FontAwesome
                 name={
                   parseFloat(percent_change_24h) >= 0
                     ? 'arrow-up'
                     : 'arrow-down'
                 }
-                type="font-awesome"
                 size={12}
                 color={twentyFourHourPercentColor}
-                containerStyle={{ marginRight: 5 }}
+                style={{ marginRight: 5 }}
               />
               <Text
                 style={[
@@ -720,14 +718,13 @@ class CryptoDetailScreen extends Component {
               1h Change
             </Text>
             <View style={styles.percentChangeValueContainer}>
-              <Icon
+              <FontAwesome
                 name={
                   parseFloat(percent_change_1h) >= 0 ? 'arrow-up' : 'arrow-down'
                 }
-                type="font-awesome"
                 size={10}
                 color={oneHourPercentColor}
-                containerStyle={{ marginRight: 5 }}
+                style={{ marginRight: 5 }}
               />
               <Text
                 style={[
@@ -751,16 +748,15 @@ class CryptoDetailScreen extends Component {
               24h Change
             </Text>
             <View style={styles.percentChangeValueContainer}>
-              <Icon
+              <FontAwesome
                 name={
                   parseFloat(percent_change_24h) >= 0
                     ? 'arrow-up'
                     : 'arrow-down'
                 }
-                type="font-awesome"
                 size={10}
                 color={twentyFourHourPercentColor}
-                containerStyle={{ marginRight: 5 }}
+                style={{ marginRight: 5 }}
               />
               <Text
                 style={[
@@ -784,14 +780,13 @@ class CryptoDetailScreen extends Component {
               7d Change
             </Text>
             <View style={styles.percentChangeValueContainer}>
-              <Icon
+              <FontAwesome
                 name={
                   parseFloat(percent_change_7d) >= 0 ? 'arrow-up' : 'arrow-down'
                 }
-                type="font-awesome"
                 size={10}
                 color={sevenDayPercentColor}
-                containerStyle={{ marginRight: 5 }}
+                style={{ marginRight: 5 }}
               />
               <Text
                 style={[
@@ -1069,12 +1064,11 @@ class CryptoDetailScreen extends Component {
               { backgroundColor: themeColors.backgroundColor },
             ]}
           >
-            <Icon
+            <FontAwesome
               name="exclamation-circle"
-              type="font-awesome"
               size={50}
               color={themeColors.warning}
-              containerStyle={{ marginBottom: 20 }}
+              style={{ marginBottom: 20 }}
             />
             <Text
               style={[
