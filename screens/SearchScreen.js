@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Theme from '../tools/Theme';
 import BottomNavBar from '../components/BottomNavBar';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import { formatPrice, formatMarketCap } from '../tools/helpers';
 
@@ -333,9 +333,9 @@ const SearchScreen = ({
               { backgroundColor: themeColors.inputBackground },
             ]}
           >
-            <Ionicons
+            <MaterialIcons
               name="search"
-              size={20}
+              size={24}
               color={themeColors.textSecondary}
             />
             <TextInput
@@ -349,9 +349,9 @@ const SearchScreen = ({
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <Ionicons
-                  name="close-circle"
-                  size={20}
+                <MaterialIcons
+                  name="close"
+                  size={24}
                   color={themeColors.textLight}
                 />
               </TouchableOpacity>

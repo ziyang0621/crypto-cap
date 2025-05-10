@@ -14,7 +14,7 @@ const COINS_URL = `${API_BASE_URL}/coins/markets`;
 const CHART_DATA_URL = `${API_BASE_URL}/coins`;
 
 // 使用模拟数据（开发阶段设为true）
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 // 缓存机制
 let cachedCoinsList = null;
