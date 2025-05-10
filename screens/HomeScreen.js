@@ -92,15 +92,16 @@ const HomeScreen = ({
       headerStyle: {
         backgroundColor:
           colorScheme === 'dark'
-            ? colors.darkBackground
-            : colors.lightBackground,
+            ? colors.backgroundColor
+            : colors.cardBackground,
         elevation: 0,
         shadowOpacity: 0,
       },
       headerTintColor:
-        colorScheme === 'dark' ? colors.darkText : colors.lightText,
+        colorScheme === 'dark' ? colors.textPrimary : colors.textPrimary,
       headerTitleStyle: {
         fontWeight: 'bold',
+        color: colorScheme === 'dark' ? colors.textPrimary : colors.textPrimary,
       },
     });
   };

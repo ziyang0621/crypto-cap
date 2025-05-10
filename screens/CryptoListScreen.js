@@ -94,17 +94,13 @@ class CryptoListScreen extends Component {
 
     // 根据来源和主题设置导航栏样式
     const headerStyle = {
-      backgroundColor:
-        colorScheme === 'dark'
-          ? themeColors.darkBackground
-          : themeColors.lightBackground,
+      backgroundColor: colorScheme === 'dark' ? '#000000' : themeColors.lightBackground,
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
     };
 
-    const headerTintColor =
-      colorScheme === 'dark' ? themeColors.darkText : themeColors.lightText;
+    const headerTintColor = colorScheme === 'dark' ? '#FFFFFF' : themeColors.lightText;
 
     // 设置标题
     let title = 'Cryptocurrencies';
@@ -284,9 +280,8 @@ class CryptoListScreen extends Component {
                 width: 30,
                 fontSize: 14,
                 fontWeight: '600',
-                color: themeColors.textLight,
-                marginRight: 6,
-                textAlign: 'center',
+                color: themeColors.textSecondary,
+                marginRight: 12,
               }}
             >
               #{item.rank}
@@ -294,15 +289,16 @@ class CryptoListScreen extends Component {
             <Avatar
               source={{ uri: item.image_url }}
               rounded
-              size="medium"
+              size="small"
               containerStyle={{ marginRight: 12 }}
             />
-            <View>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: '600',
                   color: themeColors.textPrimary,
+                  marginBottom: 4,
                 }}
               >
                 {item.name}
@@ -310,7 +306,7 @@ class CryptoListScreen extends Component {
               <Text
                 style={{
                   fontSize: 14,
-                  color: themeColors.textLight,
+                  color: themeColors.textSecondary,
                 }}
               >
                 {item.symbol}
@@ -323,6 +319,7 @@ class CryptoListScreen extends Component {
                 fontSize: 16,
                 fontWeight: '700',
                 color: themeColors.textPrimary,
+                marginBottom: 4,
               }}
             >
               $
@@ -746,155 +743,287 @@ class CryptoListScreen extends Component {
     // 使用独立方法获取过滤和排序后的列表
     const filteredList = this.getFilteredList();
 
-    // 定义排序按钮
-    const buttons = ['Market Cap', 'Price', '24h Change'];
-
     return (
       <View
         style={[
           styles.containerView,
           {
-            backgroundColor:
-              colorScheme === 'dark'
-                ? themeColors.darkBackground
-                : themeColors.lightBackground,
+            backgroundColor: themeColors.backgroundColor,
           },
         ]}
       >
         {isFromSeeAll ? (
-          // 来自See All的现代化设计
-          <View
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              backgroundColor:
-                colorScheme === 'dark'
-                  ? themeColors.darkBackground
-                  : themeColors.lightBackground,
-              marginBottom: 10,
-            }}
-          >
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingVertical: 8 }}
+          <>
+            {/* Header Section */}
+            <View
+              style={{
+                paddingHorizontal: 16,
+                paddingTop: 16,
+                paddingBottom: 8,
+                backgroundColor: themeColors.backgroundColor,
+              }}
             >
-              <TouchableOpacity
-                style={{
-                  backgroundColor:
-                    selectedIndex === 0
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkBackground
-                      : themeColors.lightBackground,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  marginRight: 10,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedIndex === 0
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkText
-                      : themeColors.lightText,
-                }}
-                onPress={() => this.updateIndex(0)}
+              {/* Filter Buttons */}
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingVertical: 8 }}
               >
-                <Text
+                <TouchableOpacity
                   style={{
-                    color:
+                    backgroundColor:
+                      selectedIndex === 0 ? themeColors.primary : 'transparent',
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 20,
+                    marginRight: 10,
+                    borderWidth: 1,
+                    borderColor:
                       selectedIndex === 0
-                        ? '#fff'
-                        : colorScheme === 'dark'
-                        ? themeColors.darkTextLight
-                        : themeColors.lightTextLight,
-                    fontWeight: '600',
-                    fontSize: 14,
+                        ? themeColors.primary
+                        : themeColors.borderColor,
                   }}
+                  onPress={() => this.updateIndex(0)}
                 >
-                  Market Cap
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      color:
+                        selectedIndex === 0
+                          ? '#fff'
+                          : themeColors.textSecondary,
+                      fontWeight: '600',
+                      fontSize: 14,
+                    }}
+                  >
+                    Market Cap
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={{
-                  backgroundColor:
-                    selectedIndex === 1
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkBackground
-                      : themeColors.lightBackground,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  marginRight: 10,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedIndex === 1
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkText
-                      : themeColors.lightText,
-                }}
-                onPress={() => this.updateIndex(1)}
-              >
-                <Text
+                <TouchableOpacity
                   style={{
-                    color:
+                    backgroundColor:
+                      selectedIndex === 1 ? themeColors.primary : 'transparent',
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 20,
+                    marginRight: 10,
+                    borderWidth: 1,
+                    borderColor:
                       selectedIndex === 1
-                        ? '#fff'
-                        : colorScheme === 'dark'
-                        ? themeColors.darkTextLight
-                        : themeColors.lightTextLight,
-                    fontWeight: '600',
-                    fontSize: 14,
+                        ? themeColors.primary
+                        : themeColors.borderColor,
                   }}
+                  onPress={() => this.updateIndex(1)}
                 >
-                  Price
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      color:
+                        selectedIndex === 1
+                          ? '#fff'
+                          : themeColors.textSecondary,
+                      fontWeight: '600',
+                      fontSize: 14,
+                    }}
+                  >
+                    Price
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={{
-                  backgroundColor:
-                    selectedIndex === 2
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkBackground
-                      : themeColors.lightBackground,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedIndex === 2
-                      ? themeColors.primary
-                      : colorScheme === 'dark'
-                      ? themeColors.darkText
-                      : themeColors.lightText,
-                }}
-                onPress={() => this.updateIndex(2)}
-              >
-                <Text
+                <TouchableOpacity
                   style={{
-                    color:
+                    backgroundColor:
+                      selectedIndex === 2 ? themeColors.primary : 'transparent',
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 20,
+                    borderWidth: 1,
+                    borderColor:
                       selectedIndex === 2
-                        ? '#fff'
-                        : colorScheme === 'dark'
-                        ? themeColors.darkTextLight
-                        : themeColors.lightTextLight,
-                    fontWeight: '600',
-                    fontSize: 14,
+                        ? themeColors.primary
+                        : themeColors.borderColor,
                   }}
+                  onPress={() => this.updateIndex(2)}
                 >
-                  24h Change
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
+                  <Text
+                    style={{
+                      color:
+                        selectedIndex === 2
+                          ? '#fff'
+                          : themeColors.textSecondary,
+                      fontWeight: '600',
+                      fontSize: 14,
+                    }}
+                  >
+                    24h Change
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+
+            {/* List Section */}
+            {filteredList?.length > 0 ? (
+              <FlatList
+                data={filteredList}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!item || !item.id) {
+                        console.error('Invalid crypto data', item);
+                        return;
+                      }
+                      this.props.selectCrypto(item);
+                      setTimeout(() => {
+                        this.props.navigation.navigate('CryptoDetail', {
+                          name: item.name,
+                          id: item.id,
+                          symbol: item.symbol,
+                          crypto: item,
+                        });
+                      }, 100);
+                    }}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingVertical: 16,
+                      paddingHorizontal: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor:
+                        colorScheme === 'dark'
+                          ? themeColors.darkBorderColor
+                          : themeColors.lightBorderColor,
+                      backgroundColor:
+                        colorScheme === 'dark'
+                          ? themeColors.darkBackground
+                          : themeColors.lightBackground,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          width: 30,
+                          fontSize: 14,
+                          fontWeight: '600',
+                          color: themeColors.textSecondary,
+                          marginRight: 12,
+                        }}
+                      >
+                        #{item.rank}
+                      </Text>
+                      <Avatar
+                        source={{ uri: item.image_url }}
+                        rounded
+                        size="small"
+                        containerStyle={{ marginRight: 12 }}
+                      />
+                      <View style={{ flex: 1 }}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: '600',
+                            color: themeColors.textPrimary,
+                            marginBottom: 4,
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: themeColors.textSecondary,
+                          }}
+                        >
+                          {item.symbol}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: '700',
+                          color: themeColors.textPrimary,
+                          marginBottom: 4,
+                        }}
+                      >
+                        $
+                        {parseFloat(item.price_usd).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </Text>
+                      <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: '500',
+                            color:
+                              parseFloat(item.percent_change_24h) >= 0
+                                ? themeColors.success
+                                : themeColors.danger,
+                            marginRight: 4,
+                          }}
+                        >
+                          {parseFloat(item.percent_change_24h) >= 0 ? '+' : ''}
+                          {item.percent_change_24h}%
+                        </Text>
+                        <Icon
+                          name={
+                            parseFloat(item.percent_change_24h) >= 0
+                              ? 'arrow-up'
+                              : 'arrow-down'
+                          }
+                          type="font-awesome"
+                          size={12}
+                          color={
+                            parseFloat(item.percent_change_24h) >= 0
+                              ? themeColors.success
+                              : themeColors.danger
+                          }
+                        />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={this.onRefresh}
+                    tintColor={
+                      colorScheme === 'dark'
+                        ? themeColors.darkText
+                        : themeColors.lightText
+                    }
+                    colors={[themeColors.primary]}
+                  />
+                }
+                ListFooterComponent={this.renderFooter}
+                onEndReached={this.loadMoreCoins}
+                onEndReachedThreshold={0.5}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 20,
+                }}
+              >
+                <ActivityIndicator size="large" color={themeColors.primary} />
+              </View>
+            )}
+          </>
         ) : (
-          // 原来的设计用于其他显示
           <View>
             <SearchBar
               placeholder="Search Cryptocurrencies..."
@@ -917,7 +1046,7 @@ class CryptoListScreen extends Component {
             <ButtonGroup
               onPress={this.updateIndex}
               selectedIndex={selectedIndex}
-              buttons={buttons}
+              buttons={['Market Cap', 'Price', '24h Change']}
               containerStyle={[
                 styles.buttonGroupContainer,
                 { backgroundColor: themeColors.backgroundColor },
@@ -935,73 +1064,22 @@ class CryptoListScreen extends Component {
                 { backgroundColor: themeColors.backgroundColor },
               ]}
             />
-          </View>
-        )}
 
-        {filteredList?.length > 0 ? (
-          <FlatList
-            data={filteredList}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => item.id}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={this.onRefresh}
-                tintColor={themeColors.textPrimary}
-                colors={[themeColors.primaryLight]}
-                titleColor={themeColors.textPrimary}
-              />
-            }
-            ListFooterComponent={this.renderFooter}
-            onEndReached={this.loadMoreCoins}
-            onEndReachedThreshold={0.5}
-          />
-        ) : cryptoInfoList?.length === 0 ? (
-          <View
-            style={[
-              styles.loaderView,
-              { backgroundColor: themeColors.backgroundColor },
-            ]}
-          >
-            <ActivityIndicator size="large" color={themeColors.primaryLight} />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 20,
-              backgroundColor: themeColors.backgroundColor,
-            }}
-          >
-            <Icon
-              name="search"
-              type="font-awesome"
-              size={50}
-              color={themeColors.textLight}
-              style={{ marginBottom: 20, opacity: 0.5 }}
-            />
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: themeColors.textPrimary,
-                marginBottom: 10,
-              }}
-            >
-              No results found
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: themeColors.textSecondary,
-                textAlign: 'center',
-              }}
-            >
-              Try adjusting your search or filter to find what you're looking
-              for
-            </Text>
+            {filteredList?.length > 0 ? (
+              this.renderList(filteredList)
+            ) : (
+              <View
+                style={[
+                  styles.loaderView,
+                  { backgroundColor: themeColors.backgroundColor },
+                ]}
+              >
+                <ActivityIndicator
+                  size="large"
+                  color={themeColors.primaryLight}
+                />
+              </View>
+            )}
           </View>
         )}
       </View>

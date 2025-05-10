@@ -1,12 +1,14 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import reducers from '../reducers';
 
 // Create store with middleware
-const store = createStore(
-  reducers,
-  {}, // initial state
-  applyMiddleware(thunk)
-);
+const store = configureStore({
+  reducer: reducers,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+      immutableCheck: false,
+    }),
+});
 
 export default store;
