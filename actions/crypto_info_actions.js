@@ -5,6 +5,8 @@ import {
   FETCH_CHART_DATA,
   CLEAR_CHART_DATA,
   UPDATE_SORT_OPTIONS,
+  ADD_TO_WATCHLIST,
+  REMOVE_FROM_WATCHLIST,
 } from './types';
 import mockCoinsData from '../mockData/mockCoins';
 
@@ -253,3 +255,11 @@ export const fetchCryptoList =
       callback(mockCoinsData, error);
     }
   };
+
+export const addToWatchlist = (coin) => {
+  return { type: ADD_TO_WATCHLIST, coin };
+};
+
+export const removeFromWatchlist = (coinId) => {
+  return { type: REMOVE_FROM_WATCHLIST, coinId };
+};

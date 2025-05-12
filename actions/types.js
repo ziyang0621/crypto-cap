@@ -3,3 +3,5 @@ export const SELECT_CRYPTO = 'select_crypto';
 export const FETCH_CHART_DATA = 'fetch_chart_data';
 export const CLEAR_CHART_DATA = 'clear_chart_data';
 export const UPDATE_SORT_OPTIONS = 'update_sort_options';
+export const ADD_TO_WATCHLIST = 'add_to_watchlist';
+export const REMOVE_FROM_WATCHLIST = 'remove_from_watchlist';

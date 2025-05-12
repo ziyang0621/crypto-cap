@@ -221,15 +221,32 @@ class CryptoDetailScreen extends Component {
 
   // 更新导航选项
   updateNavigationOptions = () => {
-    const { themeColors } = this.state;
-    const { cryptoInfo } = this.props;
+    const { cryptoInfo, navigation } = this.props;
+    const { isFavorite, themeColors } = this.state;
+    const crypto = cryptoInfo?.selectedCrypto;
 
-    this.props.navigation.setOptions({
-      headerTitle: cryptoInfo?.selectedCrypto?.name || 'Details',
-      headerTitleStyle: {
-        color: themeColors.headerTintColor,
-        fontSize: 18,
-      },
+    if (!crypto) {
+      console.log('未找到加密货币数据，无法更新导航选项');
+      return;
+    }
+
+    // 创建一个带有收藏按钮的头部右侧按钮
+    const headerRight = () => (
+      <TouchableOpacity
+        onPress={this.toggleFavorite}
+        style={{ marginRight: 15, padding: 5 }}
+      >
+        <FontAwesome
+          name={isFavorite ? 'star' : 'star-o'}
+          size={24}
+          color={isFavorite ? themeColors.primary : themeColors.textPrimary}
+        />
+      </TouchableOpacity>
+    );
+
+    navigation.setOptions({
+      title: crypto.name,
+      headerRight,
       headerStyle: {
         backgroundColor: themeColors.headerBackground,
         elevation: 0,
@@ -237,54 +254,41 @@ class CryptoDetailScreen extends Component {
         borderBottomWidth: 0,
       },
       headerTintColor: themeColors.headerTintColor,
-      headerLeft: () => (
-        <TouchableOpacity
-          style={{ paddingLeft: 16, padding: 8 }}
-          onPress={() => {
-            this.props.navigation.goBack();
-          }}
-        >
-          <MaterialCommunityIcons
-            name="chevron-left"
-            size={24}
-            color={themeColors.headerTintColor}
-          />
-        </TouchableOpacity>
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ paddingRight: 16, padding: 8 }}
-          onPress={this.toggleFavorite}
-        >
-          <FontAwesome
-            name={this.state.isFavorite ? 'star' : 'star-o'}
-            size={20}
-            color={
-              this.state.isFavorite ? '#FFD700' : themeColors.headerTintColor
-            }
-          />
-        </TouchableOpacity>
-      ),
+      headerTitleStyle: {
+        color: themeColors.textPrimary,
+      },
     });
   };
 
   // 检查加密货币是否为收藏
   checkIfFavorite = (cryptoId) => {
-    // 这里应该从Redux或AsyncStorage读取收藏列表
-    // 目前仅仅模拟该功能
-    const isFavorite = false;
+    // 从Redux watchlist中检查币种是否存在
+    const { watchlist } = this.props;
+    const isFavorite = watchlist.some((coin) => coin.id === cryptoId);
     this.setState({ isFavorite });
   };
 
   // 切换收藏状态
   toggleFavorite = () => {
+    const { cryptoInfo } = this.props;
+    const selectedCrypto = cryptoInfo?.selectedCrypto;
+
+    if (!selectedCrypto) {
+      console.error('无法添加到收藏夹：未选择加密货币');
+      return;
+    }
+
     // 切换收藏状态
+    if (this.state.isFavorite) {
+      // 如果已经收藏，则移除
+      this.props.removeFromWatchlist(selectedCrypto.id);
+    } else {
+      // 如果未收藏，则添加
+      this.props.addToWatchlist(selectedCrypto);
+    }
+
+    // 更新状态
     this.setState({ isFavorite: !this.state.isFavorite }, () => {
-      const { cryptoInfo } = this.props;
-      if (cryptoInfo?.selectedCrypto) {
-        // 这里应该将收藏状态保存到Redux/AsyncStorage
-        // 目前仅显示切换效果
-      }
       this.updateNavigationOptions();
     });
   };
@@ -1292,8 +1296,12 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({ cryptoInfo }) {
-  return { cryptoInfo };
+function mapStateToProps({ cryptoInfo, watchlist }) {
+  return {
+    chartData: cryptoInfo.chartData,
+    cryptoInfo,
+    watchlist: watchlist.list || [],
+  };
 }
 
 export default connect(mapStateToProps, actions)(CryptoDetailScreen);
